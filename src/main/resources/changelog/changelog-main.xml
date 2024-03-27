@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <preConditions>
+        <runningAs  username="albionrmt"/>
+    </preConditions>
+
+    <changeSet id="1" author="vayner">
+        <createTable tableName="category">
+            <column name="systemName" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="displayName" type="varchar(50)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="vayner">
+        <createTable tableName="city">
+            <column name="systemName" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="displayName" type="varchar(50)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="vayner">
+        <createTable tableName="station">
+            <column name="systemName" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="displayName" type="varchar(50)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="vayner">
+        <createTable tableName="subcategory">
+            <column name="systemName" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="displayName" type="varchar(50)"/>
+            <column name="category" type="varchar(50)">
+                <constraints foreignKeyName="category" references="category(systemName)"/>
+            </column>
+            <column name="prefferedcity" type="varchar(50)">
+                <constraints foreignKeyName="prefferedcity" references="city(systemName)"/>
+            </column>
+            <column name="station" type="varchar(50)">
+                <constraints foreignKeyName="station" references="station(systemName)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="vayner">
+        <createTable tableName="resource">
+            <column name="systemName" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="displayName" type="varchar(50)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="6" author="vayner">
+        <createTable tableName="item">
+            <column name="systemName" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="displayName" type="varchar(50)"/>
+            <column name="subcategory" type="varchar(50)">
+                <constraints foreignKeyName="subcategory" references="subcategory(systemName)"/>
+            </column>
+            <column name="resource1" type="varchar(50)">
+                <constraints foreignKeyName="resource1" references="resource(systemName)"/>
+            </column>
+            <column name="resource2" type="varchar(50)">
+                <constraints foreignKeyName="resource2" references="resource(systemName)"/>
+            </column>
+            <column name="resource1ratio" type="int"/>
+            <column name="resource2ratio" type="int"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
