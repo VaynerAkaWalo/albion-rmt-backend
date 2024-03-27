@@ -14,75 +14,79 @@
 
     <changeSet id="1" author="vayner">
         <createTable tableName="category">
-            <column name="systemName" type="varchar(50)">
+            <column name="system_name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="displayName" type="varchar(50)"/>
+            <column name="display_name" type="varchar(50)"/>
         </createTable>
     </changeSet>
 
     <changeSet id="2" author="vayner">
         <createTable tableName="city">
-            <column name="systemName" type="varchar(50)">
+            <column name="system_name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="displayName" type="varchar(50)"/>
+            <column name="display_name" type="varchar(50)"/>
         </createTable>
     </changeSet>
 
     <changeSet id="3" author="vayner">
         <createTable tableName="station">
-            <column name="systemName" type="varchar(50)">
+            <column name="system_name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="displayName" type="varchar(50)"/>
+            <column name="display_name" type="varchar(50)"/>
         </createTable>
     </changeSet>
 
     <changeSet id="4" author="vayner">
         <createTable tableName="subcategory">
-            <column name="systemName" type="varchar(50)">
+            <column name="system_name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="displayName" type="varchar(50)"/>
+            <column name="display_name" type="varchar(50)"/>
             <column name="category" type="varchar(50)">
-                <constraints foreignKeyName="category" references="category(systemName)"/>
+                <constraints foreignKeyName="category" references="category(system_name)"/>
             </column>
             <column name="prefferedcity" type="varchar(50)">
-                <constraints foreignKeyName="prefferedcity" references="city(systemName)"/>
+                <constraints foreignKeyName="prefferedcity" references="city(system_name)"/>
             </column>
             <column name="station" type="varchar(50)">
-                <constraints foreignKeyName="station" references="station(systemName)"/>
+                <constraints foreignKeyName="station" references="station(system_name)"/>
             </column>
         </createTable>
     </changeSet>
 
     <changeSet id="5" author="vayner">
         <createTable tableName="resource">
-            <column name="systemName" type="varchar(50)">
+            <column name="system_name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="displayName" type="varchar(50)"/>
+            <column name="display_name" type="varchar(50)"/>
         </createTable>
     </changeSet>
 
     <changeSet id="6" author="vayner">
         <createTable tableName="item">
-            <column name="systemName" type="varchar(50)">
+            <column name="system_name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="displayName" type="varchar(50)"/>
+            <column name="display_name" type="varchar(50)"/>
             <column name="subcategory" type="varchar(50)">
-                <constraints foreignKeyName="subcategory" references="subcategory(systemName)"/>
+                <constraints foreignKeyName="subcategory" references="subcategory(system_name)"/>
             </column>
             <column name="resource1" type="varchar(50)">
-                <constraints foreignKeyName="resource1" references="resource(systemName)"/>
+                <constraints foreignKeyName="resource1" references="resource(system_name)"/>
             </column>
             <column name="resource2" type="varchar(50)">
-                <constraints foreignKeyName="resource2" references="resource(systemName)"/>
+                <constraints foreignKeyName="resource2" references="resource(system_name)"/>
             </column>
             <column name="resource1ratio" type="int"/>
             <column name="resource2ratio" type="int"/>
         </createTable>
+    </changeSet>
+
+    <changeSet id="7" author="vayner">
+        <loadData tableName="resource" file="classpath:data/resources.csv"/>
     </changeSet>
 </databaseChangeLog>
