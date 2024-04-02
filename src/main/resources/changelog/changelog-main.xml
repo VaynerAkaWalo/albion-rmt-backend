@@ -48,8 +48,8 @@
             <column name="category" type="varchar(50)">
                 <constraints foreignKeyName="category" references="category(system_name)"/>
             </column>
-            <column name="prefferedcity" type="varchar(50)">
-                <constraints foreignKeyName="prefferedcity" references="city(system_name)"/>
+            <column name="preferred_city" type="varchar(50)">
+                <constraints foreignKeyName="preferred_city" references="city(system_name)"/>
             </column>
             <column name="station" type="varchar(50)">
                 <constraints foreignKeyName="station" references="station(system_name)"/>
@@ -89,4 +89,25 @@
     <changeSet id="7" author="vayner">
         <loadData tableName="resource" file="classpath:data/resources.csv"/>
     </changeSet>
+
+    <changeSet id="8" author="vayner">
+        <loadData tableName="city" file="classpath:data/city.csv"/>
+    </changeSet>
+
+    <changeSet id="9" author="vayner">
+        <loadData tableName="station" file="classpath:data/station.csv"/>
+    </changeSet>
+
+    <changeSet id="10" author="vayner">
+        <loadData tableName="category" file="classpath:data/category.csv"/>
+    </changeSet>
+
+    <changeSet id="11" author="vayner">
+        <loadData tableName="subcategory" file="classpath:data/subcategory.csv"/>
+    </changeSet>
+
+    <changeSet id="12" author="vayner">
+        <loadData tableName="item" file="classpath:data/item.csv"/>
+    </changeSet>
+
 </databaseChangeLog>
