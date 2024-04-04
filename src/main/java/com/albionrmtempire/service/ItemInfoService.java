@@ -5,7 +5,7 @@ import com.albionrmtempire.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -14,10 +14,10 @@ public class ItemInfoService {
 
     private final CategoryRepository categoryRepository;
 
-    public Collection<CategoryResponse> getAllCategories() {
+    public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll()
                 .stream()
                 .map(CategoryResponse::from)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 }
