@@ -15,4 +15,4 @@ docker push ghcr.io/vaynerakawalo/albion-rmt-backend:$GIT_COMMIT
 
 cd $current_dir
 
-echo `Created and published image with tag: $GIT_COMMIT`
+echo "Created and published image with tag: $GIT_COMMIT"
