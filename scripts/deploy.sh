@@ -1,10 +1,10 @@
 #!/bin/zsh
 
-CONTAINER_NAME = "albion-rmt-backend"
+CONTAINER_NAME=albion-rmt-backend
 
 docker pull ghcr.io/vaynerakawalo/albion-rmt-backend:$1
 
-docker kill CURRENT_CONTAINER
+docker kill $CONTAINER_NAME
 
 docker system prune -f
 
