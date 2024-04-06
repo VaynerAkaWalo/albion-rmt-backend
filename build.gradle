@@ -2,14 +2,14 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.4'
     id 'io.spring.dependency-management' version '1.1.4'
-    id 'org.graalvm.buildtools.native' version '0.9.28'
 }
 
 group = 'com.albionrmtempire'
-version = '0.0.1-SNAPSHOT'
+version = '0.1'
 
 java {
     sourceCompatibility = '21'
+    targetCompatibility = '21'
 }
 
 configurations {
