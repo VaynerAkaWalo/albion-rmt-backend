@@ -43,7 +43,7 @@ public class ItemInfoService {
                 .city(cityResponse(subcategory.preferredCity() == null ? null : subcategory.preferredCity().getId()))
                 .station(stationResponse(subcategory.station().getId()))
                 .resourceOne(resourceResponse(item.resource1().getId(), item.resource1ratio()))
-                .resourceTwo(resourceResponse(item.resource2().getId(), item.resource2ratio()))
+                .resourceTwo(item.resource2() != null ? resourceResponse(item.resource2().getId(), item.resource2ratio()) : null)
                 .build();
     }
 
