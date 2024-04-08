@@ -40,7 +40,7 @@ public class ItemInfoService {
         return ItemResponse.builder()
                 .name(item.systemName())
                 .displayName(item.displayName())
-                .city(cityResponse(subcategory.preferredCity().getId()))
+                .city(cityResponse(subcategory.preferredCity() == null ? null : subcategory.preferredCity().getId()))
                 .station(stationResponse(subcategory.station().getId()))
                 .resourceOne(resourceResponse(item.resource1().getId(), item.resource1ratio()))
                 .resourceTwo(resourceResponse(item.resource2().getId(), item.resource2ratio()))
