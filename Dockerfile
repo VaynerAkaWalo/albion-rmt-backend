@@ -3,4 +3,7 @@ LABEL authors="vayner"
 
 COPY build/libs/albion-rmt-backend-*.jar /opt/albion-rmt-backend.jar
 
+RUN mkdir "/opt/logs"
+RUN chmod +wrx /opt/logs
+
 ENTRYPOINT ["java", "-Dspring.profiles.active=test", "-jar", "/opt/albion-rmt-backend.jar"]
