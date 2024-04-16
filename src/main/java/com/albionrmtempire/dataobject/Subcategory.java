@@ -10,4 +10,4 @@ public record Subcategory(@Id String systemName,
                           String displayName,
                           AggregateReference<City, String> preferredCity,
                           AggregateReference<Station, String> station,
-                          @MappedCollection(idColumn = "SUBCATEGORY") Set<Item> items) {}
+                          @MappedCollection(idColumn = "subcategory") Set<Item> items) {}

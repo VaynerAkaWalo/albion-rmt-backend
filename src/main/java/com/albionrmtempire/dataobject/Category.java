@@ -7,4 +7,4 @@ import java.util.Set;
 
 public record Category(@Id String systemName,
                        String displayName,
-                       @MappedCollection(idColumn = "CATEGORY") Set<Subcategory> subcategories) {}
+                       @MappedCollection(idColumn = "category") Set<Subcategory> subcategories) {}
