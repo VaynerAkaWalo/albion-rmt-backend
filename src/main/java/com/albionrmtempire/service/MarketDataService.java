@@ -1,5 +1,6 @@
 package com.albionrmtempire.service;
 
+import com.albionrmtempire.dataobject.Order;
 import com.albionrmtempire.datatransferobject.OrderRequest;
 import com.albionrmtempire.exception.NotFoundException;
 import com.albionrmtempire.exception.UnsupportedBuyerException;
@@ -33,6 +34,10 @@ public class MarketDataService {
         logPublishedOrders(result);
 
         return result;
+    }
+
+    public void processOrder(Order order) {
+
     }
 
     private void logPublishedOrders(Map<String, List<String>> orders) {

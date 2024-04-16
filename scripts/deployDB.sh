@@ -11,5 +11,3 @@ docker run \
   -v /data:/var/lib/postgresql/data \
   -d \
   postgres
-
-  docker network connect albion-network postgres

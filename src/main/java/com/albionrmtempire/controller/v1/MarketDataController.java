@@ -1,17 +1,17 @@
 package com.albionrmtempire.controller.v1;
 
 
+import com.albionrmtempire.dataobject.PersistedOrder;
 import com.albionrmtempire.datatransferobject.OrderRequest;
 import com.albionrmtempire.producer.OrderProducer;
+import com.albionrmtempire.repository.PersistedOrderRepository;
 import com.albionrmtempire.service.MarketDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +21,7 @@ import java.util.Map;
 public class MarketDataController {
 
     private final MarketDataService marketDataService;
+    private final PersistedOrderRepository orderRepository;
 
     @PostMapping
     ResponseEntity<Map<String, List<String>>> postOrder(@RequestBody List<OrderRequest> orders) {
@@ -30,5 +31,10 @@ public class MarketDataController {
         };
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    Collection<PersistedOrder> getAllOrders() {
+        return orderRepository.findAll();
     }
 }

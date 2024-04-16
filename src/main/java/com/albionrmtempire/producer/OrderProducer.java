@@ -47,7 +47,7 @@ public class OrderProducer {
         final Optional<Item> optionalItem = itemRepository.findById(systemName);
 
         return new Order(
-                request.totalPrice(),
+                request.unitPrice(),
                 request.amount(),
                 request.tier(),
                 request.enchantment(),
@@ -55,7 +55,7 @@ public class OrderProducer {
                 request.isFinished(),
                 request.buyer(),
                 optionalItem.orElseThrow(() -> NotFoundException.ofItem(systemName)),
-                ZonedDateTime.of(LocalDateTime.now(), UTC),
+                ZonedDateTime.now(UTC),
                 ZonedDateTime.of(LocalDateTime.parse(request.expireDate()), UTC)
         );
     }
