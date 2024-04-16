@@ -110,4 +110,21 @@
         <loadData tableName="item" file="classpath:data/item.csv"/>
     </changeSet>
 
+    <changeSet id="13" author="vayner">
+        <createTable tableName="persisted_order">
+            <column name="id" type="serial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="item" type="varchar(50)">
+                <constraints foreignKeyName="item" references="item(system_name)"/>
+            </column>
+            <column name="amount" type="bigint"/>
+            <column name="unit_price" type="bigint"/>
+            <column name="tier" type="smallint"/>
+            <column name="enchant" type="smallint"/>
+            <column name="quality" type="smallint"/>
+            <column name="expire" type="date"/>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>
