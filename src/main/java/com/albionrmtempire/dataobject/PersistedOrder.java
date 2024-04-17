@@ -19,6 +19,9 @@ public class PersistedOrder {
     @Id
     private String id;
 
+    private long orderId;
+    private long ttl;
+
     private AggregateReference<Item, String> item;
 
     private long amount;

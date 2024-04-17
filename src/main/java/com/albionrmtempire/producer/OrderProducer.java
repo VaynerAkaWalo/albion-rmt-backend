@@ -47,6 +47,7 @@ public class OrderProducer {
         final Optional<Item> optionalItem = itemRepository.findById(systemName);
 
         return new Order(
+                request.Id(),
                 request.unitPrice(),
                 request.amount(),
                 request.tier(),
