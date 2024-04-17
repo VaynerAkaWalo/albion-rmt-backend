@@ -17,7 +17,7 @@ import java.util.Date;
 public class PersistedOrder {
 
     @Id
-    private String id;
+    private Long id;
 
     private long orderId;
     private long ttl;
