@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public interface PersistedOrderRepository extends CrudRepository<PersistedOrder, String> {
+public interface PersistedOrderRepository extends CrudRepository<PersistedOrder, Long> {
 
     Collection<PersistedOrder> findAll();
     Collection<PersistedOrder> findAllByTtlGreaterThan(long limit);
