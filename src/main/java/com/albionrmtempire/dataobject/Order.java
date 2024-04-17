@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 public record Order(
+        long id,
         long unitPrice,
         long amount,
         short tier,

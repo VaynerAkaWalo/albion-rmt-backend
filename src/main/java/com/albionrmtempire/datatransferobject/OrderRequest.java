@@ -3,6 +3,7 @@ package com.albionrmtempire.datatransferobject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record OrderRequest(
+        @JsonProperty("Id") long Id,
         @JsonProperty("UnitPriceSilver") long unitPrice,
         @JsonProperty("TotalPriceSilver") long totalPrice,
         @JsonProperty("Amount") long amount,

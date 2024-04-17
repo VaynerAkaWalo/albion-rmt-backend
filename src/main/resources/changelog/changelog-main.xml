@@ -115,6 +115,12 @@
             <column name="id" type="serial">
                 <constraints primaryKey="true"/>
             </column>
+            <column name="order_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ttl" type="bigint">
+                <constraints nullable="false"/>
+            </column>
             <column name="item" type="varchar(50)">
                 <constraints foreignKeyName="item" references="item(system_name)"/>
             </column>

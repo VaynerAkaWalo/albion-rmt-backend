@@ -35,6 +35,6 @@ public class MarketDataController {
 
     @GetMapping
     Collection<PersistedOrder> getAllOrders() {
-        return orderRepository.findAll();
+        return orderRepository.findAllByTtlGreaterThan(0);
     }
 }

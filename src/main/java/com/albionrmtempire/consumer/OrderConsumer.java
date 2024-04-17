@@ -3,6 +3,7 @@ package com.albionrmtempire.consumer;
 import com.albionrmtempire.dataobject.Order;
 import com.albionrmtempire.dataobject.PersistedOrder;
 import com.albionrmtempire.repository.PersistedOrderRepository;
+import com.albionrmtempire.service.MarketDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.event.EventListener;
@@ -20,18 +21,19 @@ import java.util.concurrent.TimeUnit;
 public class OrderConsumer {
 
     private static final ZoneId UTC = ZoneOffset.UTC;
-    private final PersistedOrderRepository orderRepository;
+    private final MarketDataService marketDataService;
 
     @EventListener
     void processEvent(Order order) {
         final long durationInQueue = calcSecondsFrom(order.acknowledgedDate());
         log.info("Order processed after {} seconds, {} millis", TimeUnit.MILLISECONDS.toSeconds(durationInQueue), durationInQueue % 1000);
 
-        orderRepository.save(toPersistedOrder(order));
+        marketDataService.processOrder(toPersistedOrder(order));
     }
 
     private PersistedOrder toPersistedOrder(Order order) {
         return PersistedOrder.builder()
+                .orderId(order.id())
                 .amount(order.amount())
                 .unitPrice(order.unitPrice())
                 .tier(order.tier())
