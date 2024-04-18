@@ -2,18 +2,19 @@ package com.albionrmtempire.service;
 
 import com.albionrmtempire.dataobject.PersistedOrder;
 import com.albionrmtempire.datatransferobject.OrderRequest;
+import com.albionrmtempire.datatransferobject.OrderResponse;
 import com.albionrmtempire.exception.NotFoundException;
 import com.albionrmtempire.exception.UnsupportedBuyerException;
 import com.albionrmtempire.producer.OrderProducer;
+import com.albionrmtempire.repository.ItemRepository;
 import com.albionrmtempire.repository.PersistedOrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.Clock;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.albionrmtempire.util.ItemUtil.dropTierPrefix;
@@ -29,6 +30,8 @@ public class MarketDataService {
 
     private final OrderProducer orderProducer;
     private final PersistedOrderRepository orderRepository;
+    private final ItemRepository itemRepository;
+    private final Clock clock;
 
     public Map<String, List<String>> publishOrders(List<OrderRequest> orders) {
         var result = orders.stream()
@@ -40,46 +43,45 @@ public class MarketDataService {
         return result;
     }
 
+    public Collection<OrderResponse> getAllNotExpiredOrders() {
+        return orderRepository.findAllByTtlGreaterThan(0)
+                .stream()
+                .map(this::toDto)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
+
     public void processOrder(PersistedOrder order) {
-        Optional<PersistedOrder> existingOrder = orderRepository.findByOrderId(order.getOrderId());
-        if (existingOrder.isPresent()) {
-            updateOrder(existingOrder.get(), order);
-            return;
-        }
+        var optionalOrder = orderRepository.findByOrderId(order.getOrderId());
 
-        reduceTtlOfOlderRequests(order);
+        final PersistedOrder processedOrder
+                = optionalOrder.map(persistedOrder -> updateExistingOrder(persistedOrder, order)).orElse(order);
 
-        order.setTtl(BASE_TTL);
-        orderRepository.save(order);
+        reduceTtlOfOlderRequests(processedOrder);
+
+        saveOrder(processedOrder);
+    }
+
+    private PersistedOrder updateExistingOrder(PersistedOrder existingOrder, PersistedOrder newOrder) {
+        existingOrder.setAmount(newOrder.getAmount());
+        existingOrder.setUnitPrice(newOrder.getUnitPrice());
+        return existingOrder;
     }
 
     private void reduceTtlOfOlderRequests(PersistedOrder processedOrder) {
-        List<PersistedOrder> orders
-                = orderRepository.findAllByItemAndTierAndEnchantAndQualityAndOrderIdNot(processedOrder.getItem(), processedOrder.getTier(), processedOrder.getEnchant(), processedOrder.getQuality(), processedOrder.getOrderId());
-
-        orders.forEach(order -> {
-            order.setTtl(order.getTtl() - 1);
-            orderRepository.save(order);
-        });
+        orderRepository
+                .findAllByItemAndTierAndEnchantAndQualityAndOrderIdNot(processedOrder.getItem(), processedOrder.getTier(), processedOrder.getEnchant(), processedOrder.getQuality(), processedOrder.getOrderId())
+                .forEach(order -> {
+                    order.setTtl(order.getTtl() - 1);
+                    orderRepository.save(order);
+                });
     }
 
-    private void updateOrder(PersistedOrder persistedOrder, PersistedOrder newOrder) {
-        if (checkForUpdates(persistedOrder, newOrder) || persistedOrder.getTtl() != BASE_TTL) {
-            persistedOrder.setAmount(newOrder.getAmount());
-            persistedOrder.setUnitPrice(newOrder.getUnitPrice());
-            persistedOrder.setTtl(BASE_TTL);
-
-            orderRepository.save(persistedOrder);
-        }
+    private void saveOrder(PersistedOrder order) {
+        order.setTtl(BASE_TTL);
+        order.setLastUpdate(Date.from(clock.instant()));
+        orderRepository.save(order);
     }
-
-    private boolean checkForUpdates(PersistedOrder o1, PersistedOrder o2) {
-        if (o1.getAmount() != o2.getAmount()) {
-            return false;
-        }
-        return o1.getUnitPrice() == o2.getUnitPrice();
-    }
-
 
     private void logPublishedOrders(Map<String, List<String>> orders) {
         log.info("Successfully created {} orders, {} failed",
@@ -89,10 +91,24 @@ public class MarketDataService {
     private Pair<String, String> publishOrder(OrderRequest order) {
         try {
             return Pair.of(SUCCESS, orderProducer.publishOrderEvent(order));
-        }
-        catch (UnsupportedBuyerException | NotFoundException ex) {
+        } catch (UnsupportedBuyerException | NotFoundException ex) {
             log.warn("Could not publish order: {}", ex.getMessage());
             return Pair.of(FAIL, dropTierPrefix(order.itemGroupType()));
         }
+    }
+
+    public OrderResponse toDto(PersistedOrder order) {
+        return itemRepository.findById(order.getItem().getId())
+                .map(item -> new OrderResponse(
+                        item.systemName(),
+                        item.displayName(),
+                        order.getAmount(),
+                        order.getUnitPrice(),
+                        order.getTier(),
+                        order.getEnchant(),
+                        order.getQuality(),
+                        order.getLastUpdate()))
+                .orElse(null);
+
     }
 }
