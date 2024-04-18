@@ -1,9 +1,6 @@
 package com.albionrmtempire.dataobject;
 
-import com.albionrmtempire.datatransferobject.OrderRequest;
-
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.util.Date;
 
 public record Order(
         long id,
@@ -15,6 +12,6 @@ public record Order(
         boolean isFinished,
         String buyer,
         Item item,
-        ZonedDateTime acknowledgedDate,
-        ZonedDateTime expire
+        Date acknowledgedDate,
+        Date expire
 ) {}

@@ -12,10 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.util.Date;
 import java.util.Optional;
 
 import static com.albionrmtempire.util.ItemUtil.dropTierPrefix;
@@ -24,11 +22,11 @@ import static com.albionrmtempire.util.ItemUtil.dropTierPrefix;
 @RequiredArgsConstructor
 @Log4j2
 public class OrderProducer {
-    private static final ZoneId UTC = ZoneOffset.UTC;
     private static final String BLACK_MARKET = "@BLACK_MARKET";
 
     private final ApplicationEventPublisher publisher;
     private final ItemRepository itemRepository;
+    private final Clock clock;
 
     public String publishOrderEvent(OrderRequest orderRequest) {
         final Order order = parse(orderRequest);
@@ -56,8 +54,8 @@ public class OrderProducer {
                 request.isFinished(),
                 request.buyer(),
                 optionalItem.orElseThrow(() -> NotFoundException.ofItem(systemName)),
-                ZonedDateTime.now(UTC),
-                ZonedDateTime.of(LocalDateTime.parse(request.expireDate()), UTC)
+                Date.from(clock.instant()),
+                Date.from(LocalDateTime.parse(request.expireDate()).toInstant(ZoneOffset.UTC))
         );
     }
 }

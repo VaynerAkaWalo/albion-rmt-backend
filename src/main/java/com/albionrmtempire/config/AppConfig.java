@@ -6,6 +6,8 @@ import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.core.task.AsyncTaskExecutor;
 
+import java.time.Clock;
+
 @Configuration
 public class AppConfig {
 
@@ -17,5 +19,10 @@ public class AppConfig {
         eventMulticaster.setTaskExecutor(taskExecutor);
 
         return eventMulticaster;
+    }
+
+    @Bean
+    Clock clock() {
+        return Clock.systemUTC();
     }
 }

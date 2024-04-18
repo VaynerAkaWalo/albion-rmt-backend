@@ -2,7 +2,6 @@ package com.albionrmtempire.consumer;
 
 import com.albionrmtempire.dataobject.Order;
 import com.albionrmtempire.dataobject.PersistedOrder;
-import com.albionrmtempire.repository.PersistedOrderRepository;
 import com.albionrmtempire.service.MarketDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -10,9 +9,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.time.*;
-import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -20,12 +18,12 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class OrderConsumer {
 
-    private static final ZoneId UTC = ZoneOffset.UTC;
     private final MarketDataService marketDataService;
+    private final Clock clock;
 
     @EventListener
     void processEvent(Order order) {
-        final long durationInQueue = calcSecondsFrom(order.acknowledgedDate());
+        final long durationInQueue = calcMillisBetweenNow(order.acknowledgedDate());
         log.info("Order processed after {} seconds, {} millis", TimeUnit.MILLISECONDS.toSeconds(durationInQueue), durationInQueue % 1000);
 
         marketDataService.processOrder(toPersistedOrder(order));
@@ -39,13 +37,12 @@ public class OrderConsumer {
                 .tier(order.tier())
                 .enchant(order.enchant())
                 .quality(order.quality())
-                .expire(Date.valueOf(order.expire().toLocalDate()))
+                .expire(order.expire())
                 .item(AggregateReference.to(order.item().systemName()))
                 .build();
     }
 
-    private long calcSecondsFrom(ZonedDateTime date){
-        Instant duration = ZonedDateTime.now(UTC).toInstant().minus(date.toEpochSecond(), ChronoUnit.SECONDS);
-        return duration.toEpochMilli();
+    private long calcMillisBetweenNow(Date then) {
+        return clock.millis() - then.toInstant().toEpochMilli();
     }
 }
