@@ -10,6 +10,7 @@ import com.albionrmtempire.repository.ItemRepository;
 import com.albionrmtempire.repository.PersistedOrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 
@@ -101,7 +102,7 @@ public class MarketDataService {
         return itemRepository.findById(order.getItem().getId())
                 .map(item -> new OrderResponse(
                         item.systemName(),
-                        item.displayName(),
+                        StringUtils.isEmpty(item.displayName()) ? item.systemName() : item.displayName(),
                         order.getAmount(),
                         order.getUnitPrice(),
                         order.getTier(),
