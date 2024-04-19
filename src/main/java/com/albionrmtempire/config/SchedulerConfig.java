@@ -10,6 +10,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class SchedulerConfig {
 
     @Scheduled(fixedDelay = 5000)
-    @CacheEvict("cache")
+    @CacheEvict("orders")
     public void evictCache() {}
 }

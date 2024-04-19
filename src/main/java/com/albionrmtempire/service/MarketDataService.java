@@ -32,7 +32,7 @@ public class MarketDataService {
 
     private final OrderProducer orderProducer;
     private final PersistedOrderRepository orderRepository;
-    private final ItemRepository itemRepository;
+    private final ItemInfoService itemInfoService;
     private final Clock clock;
 
     public Map<String, List<String>> publishOrders(List<OrderRequest> orders) {
@@ -45,12 +45,11 @@ public class MarketDataService {
         return result;
     }
 
-    @Cacheable("cache")
+    @Cacheable("orders")
     public Collection<OrderResponse> getAllNotExpiredOrders() {
         return orderRepository.findAllByTtlGreaterThan(0)
                 .stream()
                 .map(this::toDto)
-                .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
     }
 
@@ -110,18 +109,17 @@ public class MarketDataService {
     }
 
     public OrderResponse toDto(PersistedOrder order) {
-        return itemRepository.findById(order.getItem().getId())
-                .map(item -> new OrderResponse(
-                        item.systemName(),
-                        StringUtils.isEmpty(item.displayName()) ? item.systemName() : item.displayName(),
-                        order.getOrderId(),
-                        order.getAmount(),
-                        order.getUnitPrice(),
-                        order.getTier(),
-                        order.getEnchant(),
-                        order.getQuality(),
-                        order.getLastUpdate()))
-                .orElse(null);
+        var item = itemInfoService.getById(order.getItem().getId());
+        return new OrderResponse(
+                item.systemName(),
+                StringUtils.isEmpty(item.displayName()) ? item.systemName() : item.displayName(),
+                order.getOrderId(),
+                order.getAmount(),
+                order.getUnitPrice(),
+                order.getTier(),
+                order.getEnchant(),
+                order.getQuality(),
+                order.getLastUpdate());
 
     }
 }
