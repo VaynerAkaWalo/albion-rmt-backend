@@ -13,9 +13,12 @@ public interface PersistedOrderRepository extends CrudRepository<PersistedOrder,
 
     Collection<PersistedOrder> findAll();
     Collection<PersistedOrder> findAllByTtlGreaterThan(long limit);
+
     List<PersistedOrder> findAllByItemAndTierAndEnchantAndQualityAndOrderIdNot(
             AggregateReference<Item, String> item, short tier, short enchant, short quality, long orderId
     );
 
     Optional<PersistedOrder> findByOrderId(long id);
+
+    long countAllByTtlLessThan(long limit);
 }
