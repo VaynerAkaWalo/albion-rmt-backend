@@ -34,4 +34,9 @@ public class MarketDataController {
     Collection<OrderResponse> getAllOrders() {
         return marketDataService.getAllNotExpiredOrders();
     }
+
+    @DeleteMapping("/{itemId}")
+    void deleteItem(@PathVariable("itemId") long id) {
+        marketDataService.pseudoDeleteOrder(id);
+    }
 }
