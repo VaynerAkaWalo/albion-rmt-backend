@@ -16,6 +16,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("api/v1/marketdata")
 @RequiredArgsConstructor
+@CrossOrigin
 public class MarketDataController {
 
     private final MarketDataService marketDataService;
