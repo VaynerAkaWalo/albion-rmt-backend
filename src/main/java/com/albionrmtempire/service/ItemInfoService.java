@@ -6,6 +6,7 @@ import com.albionrmtempire.exception.NotFoundException;
 import com.albionrmtempire.repository.*;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,6 +46,12 @@ public class ItemInfoService {
                 .resourceOne(resourceResponse(item.resource1().getId(), item.resource1ratio()))
                 .resourceTwo(item.resource2() != null ? resourceResponse(item.resource2().getId(), item.resource2ratio()) : null)
                 .build();
+    }
+
+    @Cacheable("items")
+    public Item getById(String name) {
+        return itemRepository.findById(name)
+                .orElseThrow(() -> NotFoundException.ofItem(name));
     }
 
     private StationResponse stationResponse(String name) {

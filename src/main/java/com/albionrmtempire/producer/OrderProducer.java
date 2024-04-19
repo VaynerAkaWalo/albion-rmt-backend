@@ -6,6 +6,7 @@ import com.albionrmtempire.datatransferobject.OrderRequest;
 import com.albionrmtempire.exception.NotFoundException;
 import com.albionrmtempire.exception.UnsupportedBuyerException;
 import com.albionrmtempire.repository.ItemRepository;
+import com.albionrmtempire.service.ItemInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +26,7 @@ public class OrderProducer {
     private static final String BLACK_MARKET = "@BLACK_MARKET";
 
     private final ApplicationEventPublisher publisher;
-    private final ItemRepository itemRepository;
+    private final ItemInfoService itemInfoService;
     private final Clock clock;
 
     public String publishOrderEvent(OrderRequest orderRequest) {
@@ -42,7 +43,7 @@ public class OrderProducer {
         }
 
         final String systemName = dropTierPrefix(request.itemGroupType());
-        final Optional<Item> optionalItem = itemRepository.findById(systemName);
+        final Item item = itemInfoService.getById(systemName);
 
         return new Order(
                 request.Id(),
@@ -53,7 +54,7 @@ public class OrderProducer {
                 request.quality(),
                 request.isFinished(),
                 request.buyer(),
-                optionalItem.orElseThrow(() -> NotFoundException.ofItem(systemName)),
+                item,
                 Date.from(clock.instant()),
                 Date.from(LocalDateTime.parse(request.expireDate()).toInstant(ZoneOffset.UTC))
         );
