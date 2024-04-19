@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
@@ -44,6 +45,7 @@ public class MarketDataService {
         return result;
     }
 
+    @Cacheable("cache")
     public Collection<OrderResponse> getAllNotExpiredOrders() {
         return orderRepository.findAllByTtlGreaterThan(0)
                 .stream()
