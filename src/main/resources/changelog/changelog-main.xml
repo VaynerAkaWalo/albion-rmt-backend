@@ -129,8 +129,8 @@
             <column name="tier" type="smallint"/>
             <column name="enchant" type="smallint"/>
             <column name="quality" type="smallint"/>
-            <column name="last_update" type="date"/>
-            <column name="expire" type="date"/>
+            <column name="last_update" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="expire" type="TIMESTAMP WITHOUT TIME ZONE"/>
         </createTable>
     </changeSet>
 
