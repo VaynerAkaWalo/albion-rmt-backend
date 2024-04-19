@@ -63,6 +63,15 @@ public class MarketDataService {
         saveOrder(processedOrder);
     }
 
+    public void pseudoDeleteOrder(long orderId) {
+        var existingOrder = orderRepository.findByOrderId(orderId);
+
+        existingOrder.ifPresent(order -> {
+            order.setTtl(0);
+            orderRepository.save(order);
+        });
+    }
+
     private PersistedOrder updateExistingOrder(PersistedOrder existingOrder, PersistedOrder newOrder) {
         existingOrder.setAmount(newOrder.getAmount());
         existingOrder.setUnitPrice(newOrder.getUnitPrice());
@@ -103,6 +112,7 @@ public class MarketDataService {
                 .map(item -> new OrderResponse(
                         item.systemName(),
                         StringUtils.isEmpty(item.displayName()) ? item.systemName() : item.displayName(),
+                        order.getOrderId(),
                         order.getAmount(),
                         order.getUnitPrice(),
                         order.getTier(),
