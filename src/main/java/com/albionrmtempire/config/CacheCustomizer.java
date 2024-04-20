@@ -11,6 +11,13 @@ public class CacheCustomizer implements CacheManagerCustomizer<ConcurrentMapCach
 
     @Override
     public void customize(ConcurrentMapCacheManager cacheManager) {
-        cacheManager.setCacheNames(List.of("orders", "items"));
+        cacheManager.setCacheNames(List.of(
+                "orders",
+                "items",
+                "categories",
+                "subcategories",
+                "resources",
+                "stations",
+                "cities"));
     }
 }

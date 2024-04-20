@@ -6,6 +6,7 @@ import com.albionrmtempire.datatransferobject.OrderResponse;
 import com.albionrmtempire.exception.NotFoundException;
 import com.albionrmtempire.exception.UnsupportedBuyerException;
 import com.albionrmtempire.producer.OrderProducer;
+import com.albionrmtempire.provider.CacheableResourceProvider;
 import com.albionrmtempire.repository.ItemRepository;
 import com.albionrmtempire.repository.PersistedOrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class MarketDataService {
 
     private final OrderProducer orderProducer;
     private final PersistedOrderRepository orderRepository;
-    private final ItemInfoService itemInfoService;
+    private final CacheableResourceProvider cacheableResourceProvider;
     private final Clock clock;
 
     public Map<String, List<String>> publishOrders(List<OrderRequest> orders) {
@@ -109,7 +110,7 @@ public class MarketDataService {
     }
 
     public OrderResponse toDto(PersistedOrder order) {
-        var item = itemInfoService.getById(order.getItem().getId());
+        var item = cacheableResourceProvider.getItemBySystemName(order.getItem().getId());
         return new OrderResponse(
                 item.systemName(),
                 StringUtils.isEmpty(item.displayName()) ? item.systemName() : item.displayName(),
