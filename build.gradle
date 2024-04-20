@@ -33,6 +33,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.liquibase:liquibase-core:4.26.0'
     implementation 'org.postgresql:postgresql:42.7.3'
+    implementation 'net.dv8tion:JDA:5.0.0-beta.22' // feat: https://github.com/discord-jda/JDA
 
     implementation 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
