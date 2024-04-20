@@ -1,13 +1,13 @@
 package com.albionrmtempire.controller;
 
-import com.albionrmtempire.dataobject.PersistedOrder;
 import com.albionrmtempire.repository.PersistedOrderRepository;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 
+@Hidden
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/internal")
