@@ -3,12 +3,14 @@ package com.albionrmtempire.service;
 import com.albionrmtempire.dataobject.*;
 import com.albionrmtempire.datatransferobject.*;
 import com.albionrmtempire.exception.NotFoundException;
+import com.albionrmtempire.provider.CacheableResourceProvider;
 import com.albionrmtempire.repository.*;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,27 +19,41 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemInfoService {
 
-    private final CategoryRepository categoryRepository;
-    private final SubcategoryRepository subcategoryRepository;
-    private final ItemRepository itemRepository;
-    private final CityRepository cityRepository;
-    private final ResourceRepository resourceRepository;
-    private final StationRepository stationRepository;
+    private final CacheableResourceProvider cacheableResourceProvider;
 
     public List<CategoryResponse> getAllCategories() {
-        return categoryRepository.findAll()
+        return cacheableResourceProvider.getAllCategories()
                 .stream()
                 .map(CategoryResponse::from)
                 .collect(Collectors.toList());
     }
 
     public ItemResponse getByName(@NonNull String name) {
-        final Optional<Item> optionalItem = itemRepository.findById(name);
-        if (optionalItem.isEmpty()) {
-            throw NotFoundException.ofItem(name);
-        }
-        final Item item = optionalItem.get();
-        final Subcategory subcategory = subcategoryRepository.findByItemName(item.systemName());
+        return itemToDto(cacheableResourceProvider.getItemBySystemName(name));
+    }
+
+    private StationResponse stationResponse(String name) {
+        if (name == null) return null;
+        final Station station = cacheableResourceProvider.getStationByName(name);
+
+        return new StationResponse(station.displayName());
+    }
+
+    private CityResponse cityResponse(String name) {
+        if (name == null) return null;
+        final City city = cacheableResourceProvider.getCityByName(name);
+        return new CityResponse(city.displayName(), 35.2);
+    }
+
+    private ResourceResponse resourceResponse(String name, Integer amount) {
+        if (name == null) return null;
+        final Resource resource = cacheableResourceProvider.getResourceByName(name);
+
+        return new ResourceResponse(name, resource.displayName(), amount);
+    }
+
+    public ItemResponse itemToDto(Item item) {
+        final Subcategory subcategory = cacheableResourceProvider.getSubcategoryByItem(item.systemName());
         return ItemResponse.builder()
                 .name(item.systemName())
                 .displayName(item.displayName())
@@ -46,35 +62,5 @@ public class ItemInfoService {
                 .resourceOne(resourceResponse(item.resource1().getId(), item.resource1ratio()))
                 .resourceTwo(item.resource2() != null ? resourceResponse(item.resource2().getId(), item.resource2ratio()) : null)
                 .build();
-    }
-
-    @Cacheable("items")
-    public Item getById(String name) {
-        return itemRepository.findById(name)
-                .orElseThrow(() -> NotFoundException.ofItem(name));
-    }
-
-    private StationResponse stationResponse(String name) {
-        if (name == null) return null;
-        final Optional<Station> optional = stationRepository.findById(name);
-
-        return optional.map(station -> new StationResponse(station.displayName()))
-                .orElse(null);
-    }
-
-    private CityResponse cityResponse(String name) {
-        if (name == null) return null;
-        final Optional<City> optional = cityRepository.findById(name);
-        return optional
-                .map(city -> new CityResponse(city.displayName(), 35.2))
-                .orElse(null);
-    }
-
-    private ResourceResponse resourceResponse(String name, Integer amount) {
-        if (name == null) return null;
-        final Optional<Resource> optional = resourceRepository.findById(name);
-
-        return optional.map(resource -> new ResourceResponse(name, resource.displayName(), amount))
-                .orElse(null);
     }
 }

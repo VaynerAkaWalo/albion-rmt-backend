@@ -5,6 +5,7 @@ import com.albionrmtempire.dataobject.Order;
 import com.albionrmtempire.datatransferobject.OrderRequest;
 import com.albionrmtempire.exception.NotFoundException;
 import com.albionrmtempire.exception.UnsupportedBuyerException;
+import com.albionrmtempire.provider.CacheableResourceProvider;
 import com.albionrmtempire.repository.ItemRepository;
 import com.albionrmtempire.service.ItemInfoService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class OrderProducer {
     private static final String BLACK_MARKET = "@BLACK_MARKET";
 
     private final ApplicationEventPublisher publisher;
-    private final ItemInfoService itemInfoService;
+    private final CacheableResourceProvider cacheableResourceProvider;
     private final Clock clock;
 
     public String publishOrderEvent(OrderRequest orderRequest) {
@@ -43,7 +44,7 @@ public class OrderProducer {
         }
 
         final String systemName = dropTierPrefix(request.itemGroupType());
-        final Item item = itemInfoService.getById(systemName);
+        final Item item = cacheableResourceProvider.getItemBySystemName(systemName);
 
         return new Order(
                 request.Id(),
