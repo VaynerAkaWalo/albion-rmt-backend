@@ -25,7 +25,7 @@ public class CompleteOperationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final long startTime = clock.millis();
         filterChain.doFilter(request, response);
-        log.info("Endpoint {}, Method: {}, Time: {}ms", trimPath(request), request.getMethod(), clock.millis() - startTime);
+        log.info("Endpoint {}, Method: {}, Response code: {}, Time: {}ms", trimPath(request), request.getMethod(), response.getStatus(), clock.millis() - startTime);
     }
 
     private String trimPath(HttpServletRequest request) {
