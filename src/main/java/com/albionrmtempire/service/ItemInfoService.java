@@ -5,6 +5,7 @@ import com.albionrmtempire.datatransferobject.*;
 import com.albionrmtempire.exception.NotFoundException;
 import com.albionrmtempire.provider.CacheableResourceProvider;
 import com.albionrmtempire.repository.*;
+import io.micrometer.common.util.StringUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -56,7 +57,7 @@ public class ItemInfoService {
         final Subcategory subcategory = cacheableResourceProvider.getSubcategoryByItem(item.systemName());
         return ItemResponse.builder()
                 .name(item.systemName())
-                .displayName(item.displayName())
+                .displayName(StringUtils.isEmpty(item.displayName()) ? item.systemName() : item.displayName())
                 .city(cityResponse(subcategory.preferredCity() == null ? null : subcategory.preferredCity().getId()))
                 .station(stationResponse(subcategory.station().getId()))
                 .resourceOne(resourceResponse(item.resource1().getId(), item.resource1ratio()))
