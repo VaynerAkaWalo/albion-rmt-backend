@@ -11,11 +11,11 @@ public class TransmutationService {
     private final int TIER_OFFSET = 4;
     private final int[] MATERIALS_AT_TIER = new int[] {2, 3, 4, 5, 5};
     private final long[][] ENCHANT_COST = new long[][] {
-            {0, 1_500, 3_000, 6_000},
-            {781, 2_000, 4_000, 8_000},
-            {1_250, 3_000, 6_000, 19_800},
-            {2_500, 4_800, 15_120, 49_896},
-            {5_000, 14_400, 45_360, 149_688},
+            {0, 1_500, 3_000, 6_000, 24_000},
+            {781, 2_000, 4_000, 8_000, 32_000},
+            {1_250, 3_000, 6_000, 19_800, 79_200},
+            {2_500, 4_800, 15_120, 49_896, 199_584},
+            {5_000, 14_400, 45_360, 149_688, 748_832},
     };
 
     public long transmutationCost(int tier, int enchant) {
