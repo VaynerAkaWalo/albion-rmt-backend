@@ -134,4 +134,22 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="14" author="vayner">
+        <createTable tableName="orders_resources">
+            <column name="id" type="serial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="order_id" type="varchar2"/>
+            <column name="resource" type="varchar2">
+                <constraints foreignKeyName="resource" references="resource(system_name)"/>
+            </column>
+            <column name="ttl" type="bigint"/>
+            <column name="amount" type="bigint"/>
+            <column name="unit_price" type="bigint"/>
+            <column name="tier" type="tinyint"/>
+            <column name="enchant" type="tinyint"/>
+            <column name="last_update" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

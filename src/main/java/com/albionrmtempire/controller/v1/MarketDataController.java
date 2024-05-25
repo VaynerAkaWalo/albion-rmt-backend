@@ -26,7 +26,7 @@ public class MarketDataController {
         var response = marketDataService.publishOrders(orders);
         if (!response.containsKey("Succeed")) {
             return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
-        };
+        }
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

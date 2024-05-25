@@ -3,11 +3,10 @@ package com.albionrmtempire.service;
 import com.albionrmtempire.dataobject.PersistedOrder;
 import com.albionrmtempire.datatransferobject.OrderRequest;
 import com.albionrmtempire.datatransferobject.OrderResponse;
+import com.albionrmtempire.exception.MalformedOrderRequestException;
 import com.albionrmtempire.exception.NotFoundException;
-import com.albionrmtempire.exception.UnsupportedBuyerException;
 import com.albionrmtempire.producer.OrderProducer;
 import com.albionrmtempire.provider.CacheableResourceProvider;
-import com.albionrmtempire.repository.ItemRepository;
 import com.albionrmtempire.repository.PersistedOrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -103,7 +102,7 @@ public class MarketDataService {
     private Pair<String, String> publishOrder(OrderRequest order) {
         try {
             return Pair.of(SUCCESS, orderProducer.publishOrderEvent(order));
-        } catch (UnsupportedBuyerException | NotFoundException ex) {
+        } catch (MalformedOrderRequestException | NotFoundException ex) {
             log.warn("Could not publish order: {}", ex.getMessage());
             return Pair.of(FAIL, dropTierPrefix(order.itemGroupType()));
         }
