@@ -111,7 +111,7 @@
     </changeSet>
 
     <changeSet id="13" author="vayner">
-        <createTable tableName="persisted_order">
+        <createTable tableName="item_order">
             <column name="id" type="serial">
                 <constraints primaryKey="true"/>
             </column>
@@ -121,8 +121,8 @@
             <column name="ttl" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="item" type="varchar(50)">
-                <constraints foreignKeyName="item" references="item(system_name)"/>
+            <column name="systemName" type="varchar2">
+                <constraints foreignKeyName="systemName" references="item(system_name)"/>
             </column>
             <column name="amount" type="bigint"/>
             <column name="unit_price" type="bigint"/>
@@ -130,24 +130,27 @@
             <column name="enchant" type="smallint"/>
             <column name="quality" type="smallint"/>
             <column name="last_update" type="TIMESTAMP WITHOUT TIME ZONE"/>
-            <column name="expire" type="TIMESTAMP WITHOUT TIME ZONE"/>
         </createTable>
     </changeSet>
 
     <changeSet id="14" author="vayner">
-        <createTable tableName="orders_resources">
+        <createTable tableName="resource_order">
             <column name="id" type="serial">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="order_id" type="varchar2"/>
-            <column name="resource" type="varchar2">
-                <constraints foreignKeyName="resource" references="resource(system_name)"/>
+            <column name="order_id" type="bigint">
+                <constraints nullable="false"/>
             </column>
-            <column name="ttl" type="bigint"/>
+            <column name="ttl" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="systemName" type="varchar2">
+                <constraints foreignKeyName="systemName" references="resource(system_name)"/>
+            </column>
             <column name="amount" type="bigint"/>
             <column name="unit_price" type="bigint"/>
-            <column name="tier" type="tinyint"/>
-            <column name="enchant" type="tinyint"/>
+            <column name="tier" type="smallint"/>
+            <column name="enchant" type="smallint"/>
             <column name="last_update" type="TIMESTAMP WITHOUT TIME ZONE"/>
         </createTable>
     </changeSet>

@@ -1,6 +1,6 @@
 package com.albionrmtempire.controller;
 
-import com.albionrmtempire.repository.PersistedOrderRepository;
+import com.albionrmtempire.repository.ItemOrderRepository;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/internal")
 public class InternalController {
 
-    private final PersistedOrderRepository persistedOrderRepository;
+    private final ItemOrderRepository itemOrderRepository;
 
     @DeleteMapping("orders")
     @ResponseStatus(HttpStatus.GONE)
     void dropOrders() {
-        persistedOrderRepository.deleteAll();
+        itemOrderRepository.deleteAll();
     }
 }

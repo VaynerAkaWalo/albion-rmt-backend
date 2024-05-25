@@ -9,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Optional;
-
 @ControllerAdvice
 @Log4j2
 public class GlobalExceptionHandler {
@@ -26,7 +24,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    ResponseEntity<ProblemDetail> handleUnsupportedBuyerType(UnsupportedBuyerException ex) {
+    ResponseEntity<ProblemDetail> handleMalformedRequestException(MalformedOrderRequestException ex) {
         return handleResponse(ex, ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
