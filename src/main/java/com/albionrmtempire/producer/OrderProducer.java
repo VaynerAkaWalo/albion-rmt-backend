@@ -40,7 +40,7 @@ public class OrderProducer {
     private PreProcessedOrder preProcessOrder(OrderRequest orderRequest) {
         validateOrderRequest(orderRequest);
 
-        if (!ALLOWED_AUCTION_TYPES.contains(orderRequest.actionType())) {
+        if (!ALLOWED_AUCTION_TYPES.contains(orderRequest.auctionType())) {
             throw new UnsupportedOrderException("Unsupported action type");
         }
 
@@ -75,6 +75,10 @@ public class OrderProducer {
 
         if (request.itemGroupType().split("_").length < 2) {
             throw new MalformedOrderRequestException("Malformed item identifier");
+        }
+
+        if (StringUtils.isBlank(request.auctionType())) {
+            throw new MalformedOrderRequestException("Action type cannot be empty or null");
         }
     }
 

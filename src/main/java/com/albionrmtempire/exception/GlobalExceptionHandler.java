@@ -2,6 +2,7 @@ package com.albionrmtempire.exception;
 
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -15,6 +16,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     ResponseEntity<ProblemDetail> handleGeneralException(Exception ex) {
+        log.error(ExceptionUtils.getStackTrace(ex));
         return handleResponse(ex, null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

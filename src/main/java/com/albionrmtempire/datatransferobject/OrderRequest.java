@@ -9,7 +9,7 @@ public record OrderRequest(
         @JsonProperty("Amount") long amount,
         @JsonProperty("Tier") short tier,
         @JsonProperty("EnchantmentLevel") short enchantment,
-        @JsonProperty("ActionType") String actionType,
+        @JsonProperty("AuctionType") String auctionType,
         @JsonProperty("QualityLevel") short quality,
         @JsonProperty("IsFinished") boolean isFinished,
         @JsonProperty("BuyerName") String buyer,
