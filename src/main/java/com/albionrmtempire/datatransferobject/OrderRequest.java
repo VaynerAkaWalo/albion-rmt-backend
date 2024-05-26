@@ -16,5 +16,5 @@ public record OrderRequest(
         @JsonProperty("ItemTypeId") String itemType,
         @JsonProperty("ItemGroupTypeId") String itemGroupType,
         @JsonProperty("Expires") String expireDate,
-        @JsonProperty("SessionId") String sessionId
+        @JsonProperty("sessionId") String sessionId
 ) {}
