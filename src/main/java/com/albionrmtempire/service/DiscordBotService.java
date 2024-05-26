@@ -27,7 +27,7 @@ public class DiscordBotService extends ListenerAdapter {
     public DiscordBotService(@Value("${discord.bot.token}") String token) {
         javaDiscordAPI = JDABuilder.createDefault(token)
             .addEventListeners(this)
-            .setActivity(Activity.playing("looking for black slaves"))
+            .setActivity(Activity.playing("hmmm"))
             .enableIntents(GatewayIntent.MESSAGE_CONTENT)
             .build();
     }
