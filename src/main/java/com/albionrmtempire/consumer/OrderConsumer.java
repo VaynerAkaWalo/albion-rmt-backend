@@ -20,7 +20,7 @@ public class OrderConsumer {
 
     @EventListener
     void processEvent(PreProcessedOrder order) {
-        log.info("Order processed after {} millis", ChronoUnit.MILLIS.between(clock.instant(), order.getAcknowledgedDate()));
+        log.info("Order processed after {} millis", ChronoUnit.MILLIS.between(order.getAcknowledgedDate(), clock.instant()));
 
         marketDataService.processOrderRequest(order);
     }
