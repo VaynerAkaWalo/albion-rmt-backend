@@ -4,7 +4,7 @@ import com.albionrmtempire.datatransferobject.OrderRequest;
 import lombok.Getter;
 
 @Getter
-public class ItemOrderRequest extends PreProcessedOrder{
+public class ItemOrderRequest extends PreProcessedOrder {
 
     private final short quality;
 

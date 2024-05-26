@@ -22,7 +22,7 @@ import java.util.Set;
 @Log4j2
 public class OrderProducer {
     private static final String BLACK_MARKET = "@BLACK_MARKET";
-    private static final Set<String> ALLOWED_AUCTION_TYPES = Set.of("offer");
+    private static final Set<String> ALLOWED_AUCTION_TYPES = Set.of("offer", "");
     private static final Set<String> RESOURCES = Set.of("PLANKS", "CLOTH", "LEATHER", "METALBAR");
     private static final Set<String> ARMOURS = Set.of("HEAD", "ARMOR", "SHOES");
 
@@ -40,13 +40,13 @@ public class OrderProducer {
     private PreProcessedOrder preProcessOrder(OrderRequest orderRequest) {
         validateOrderRequest(orderRequest);
 
-        if (!ALLOWED_AUCTION_TYPES.contains(orderRequest.auctionType())) {
-            throw new UnsupportedOrderException("Unsupported action type");
-        }
-
         if (StringUtils.equals(orderRequest.buyer(), BLACK_MARKET)) {
             validateItemOrderRequest(orderRequest);
             return new ItemOrderRequest(orderRequest);
+        }
+
+        if (!ALLOWED_AUCTION_TYPES.contains(orderRequest.auctionType())) {
+            throw new UnsupportedOrderException("Unsupported action type");
         }
 
         if (isResource(orderRequest)) {
@@ -83,7 +83,7 @@ public class OrderProducer {
     }
 
     private void validateItemOrderRequest(OrderRequest request) {
-        cacheableResourceProvider.getItemBySystemName(ItemUtil.dropTierPrefix(request.itemGroupType()));
+        cacheableResourceProvider.getItemBySystemName(ItemUtil.getItemSystemName(request.itemGroupType()));
     }
 
     private boolean isResource(OrderRequest request) {

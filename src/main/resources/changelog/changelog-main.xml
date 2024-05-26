@@ -121,14 +121,16 @@
             <column name="ttl" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="systemName" type="varchar2">
-                <constraints foreignKeyName="systemName" references="item(system_name)"/>
+            <column name="system_name" type="varchar2">
+                <constraints foreignKeyName="system_name" references="item(system_name)"/>
             </column>
             <column name="amount" type="bigint"/>
             <column name="unit_price" type="bigint"/>
             <column name="tier" type="smallint"/>
             <column name="enchant" type="smallint"/>
             <column name="quality" type="smallint"/>
+            <column name="buyer" type="varchar2"/>
+            <column name="session_id" type="varchar2"/>
             <column name="last_update" type="TIMESTAMP WITHOUT TIME ZONE"/>
         </createTable>
     </changeSet>
@@ -144,13 +146,15 @@
             <column name="ttl" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="systemName" type="varchar2">
-                <constraints foreignKeyName="systemName" references="resource(system_name)"/>
+            <column name="system_name" type="varchar2">
+                <constraints foreignKeyName="system_name" references="resource(system_name)"/>
             </column>
             <column name="amount" type="bigint"/>
             <column name="unit_price" type="bigint"/>
             <column name="tier" type="smallint"/>
             <column name="enchant" type="smallint"/>
+            <column name="buyer" type="varchar2"/>
+            <column name="session_id" type="varchar2"/>
             <column name="last_update" type="TIMESTAMP WITHOUT TIME ZONE"/>
         </createTable>
     </changeSet>

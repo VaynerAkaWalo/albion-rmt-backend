@@ -27,8 +27,12 @@ public abstract class PreProcessedOrder {
         this.tier = request.tier();
         this.enchant = request.enchantment();
         this.buyer = request.buyer();
-        this.systemName = ItemUtil.dropTierPrefix(request.itemGroupType());
+        this.systemName = resolveSystemName(request);
         this.sessionId = Objects.nonNull(request.sessionId()) ? request.sessionId() : ItemUtil.randomSessionId();
         this.acknowledgedDate = Instant.now();
+    }
+
+    protected String resolveSystemName(OrderRequest orderRequest) {
+        return ItemUtil.getItemSystemName(orderRequest.itemGroupType());
     }
 }

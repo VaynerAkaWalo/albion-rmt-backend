@@ -1,13 +1,14 @@
 package com.albionrmtempire.service;
 
-import com.albionrmtempire.dataobject.orders.PersistedOrder;
 import com.albionrmtempire.datatransferobject.OrderRequest;
 import com.albionrmtempire.datatransferobject.preprocessedorders.PreProcessedOrder;
 import com.albionrmtempire.exception.MalformedOrderRequestException;
 import com.albionrmtempire.exception.NotFoundException;
+import com.albionrmtempire.exception.UnsupportedOrderException;
 import com.albionrmtempire.producer.OrderProducer;
 import com.albionrmtempire.provider.OrderProvider;
 import com.albionrmtempire.repository.ItemOrderRepository;
+import com.albionrmtempire.util.ItemUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.albionrmtempire.util.ItemUtil.dropTierPrefix;
 
 @Service
 @Log4j2
@@ -68,9 +68,9 @@ public class MarketDataService {
     private Pair<String, String> publishOrder(OrderRequest order) {
         try {
             return Pair.of(SUCCESS, orderProducer.publishOrderEvent(order));
-        } catch (MalformedOrderRequestException | NotFoundException ex) {
+        } catch (MalformedOrderRequestException | UnsupportedOrderException | NotFoundException ex) {
             log.warn("Could not publish order: {}", ex.getMessage());
-            return Pair.of(FAIL, dropTierPrefix(order.itemGroupType()));
+            return Pair.of(FAIL, ItemUtil.getItemSystemName(order.itemGroupType()));
         }
     }
 }
