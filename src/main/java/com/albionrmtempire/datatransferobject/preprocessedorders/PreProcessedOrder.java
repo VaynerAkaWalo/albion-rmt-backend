@@ -22,10 +22,10 @@ public abstract class PreProcessedOrder {
 
     protected PreProcessedOrder(OrderRequest request) {
         this.orderId = request.Id();
-        this.unitPrice = request.unitPrice();
+        this.unitPrice = request.unitPrice() / 10000;
         this.amount = request.amount();
-        this.tier = request.tier();
-        this.enchant = request.enchantment();
+        this.tier = (short) request.tier();
+        this.enchant = (short) request.enchantment();
         this.buyer = request.buyer();
         this.systemName = resolveSystemName(request);
         this.sessionId = Objects.nonNull(request.sessionId()) ? request.sessionId() : ItemUtil.randomSessionId();
