@@ -23,7 +23,9 @@ import java.util.Set;
 public class OrderProducer {
     private static final String BLACK_MARKET = "@BLACK_MARKET";
     private static final Set<String> ALLOWED_AUCTION_TYPES = Set.of("offer", "");
-    private static final Set<String> RESOURCES = Set.of("PLANKS", "CLOTH", "LEATHER", "METALBAR");
+    private static final Set<String> RESOURCES = Set.of(
+            "PLANKS", "CLOTH", "LEATHER", "METALBAR",
+            "WOOD", "ROCK", "HIDE", "FIBER");
     private static final Set<String> ARMOURS = Set.of("HEAD", "ARMOR", "SHOES");
 
     private final ApplicationEventPublisher publisher;
