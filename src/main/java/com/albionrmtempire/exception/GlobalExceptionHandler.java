@@ -2,6 +2,7 @@ package com.albionrmtempire.exception;
 
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -9,14 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Optional;
-
 @ControllerAdvice
 @Log4j2
 public class GlobalExceptionHandler {
 
     @ExceptionHandler
     ResponseEntity<ProblemDetail> handleGeneralException(Exception ex) {
+        log.error(ExceptionUtils.getStackTrace(ex));
         return handleResponse(ex, null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    ResponseEntity<ProblemDetail> handleUnsupportedBuyerType(UnsupportedBuyerException ex) {
+    ResponseEntity<ProblemDetail> handleMalformedRequestException(MalformedOrderRequestException ex) {
         return handleResponse(ex, ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 

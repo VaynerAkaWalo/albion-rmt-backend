@@ -9,10 +9,12 @@ public record OrderRequest(
         @JsonProperty("Amount") long amount,
         @JsonProperty("Tier") short tier,
         @JsonProperty("EnchantmentLevel") short enchantment,
+        @JsonProperty("AuctionType") String auctionType,
         @JsonProperty("QualityLevel") short quality,
         @JsonProperty("IsFinished") boolean isFinished,
         @JsonProperty("BuyerName") String buyer,
         @JsonProperty("ItemTypeId") String itemType,
         @JsonProperty("ItemGroupTypeId") String itemGroupType,
-        @JsonProperty("Expires") String expireDate
+        @JsonProperty("Expires") String expireDate,
+        @JsonProperty("SessionId") String sessionId
 ) {}
