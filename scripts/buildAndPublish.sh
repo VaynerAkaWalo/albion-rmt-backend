@@ -9,7 +9,7 @@ GIT_COMMIT=`git rev-parse --short HEAD`
 
 ./gradlew clean bootJar
 
-docker build -t ghcr.io/vaynerakawalo/albion-rmt-backend:$GIT_COMMIT .
+docker build --platform linux/arm64 -t ghcr.io/vaynerakawalo/albion-rmt-backend:$GIT_COMMIT .
 
 docker push ghcr.io/vaynerakawalo/albion-rmt-backend:$GIT_COMMIT
 

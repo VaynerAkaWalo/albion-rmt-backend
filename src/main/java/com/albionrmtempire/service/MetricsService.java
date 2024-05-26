@@ -1,6 +1,6 @@
 package com.albionrmtempire.service;
 
-import com.albionrmtempire.repository.PersistedOrderRepository;
+import com.albionrmtempire.provider.OrderProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MetricsService {
 
-    private final PersistedOrderRepository persistedOrderRepository;
+    private final OrderProvider orderProvider;
     private long ordersLastTime = 0;
 
     public void logDbMetrics() {
-        var count = persistedOrderRepository.count();
-        var lessThan20 = persistedOrderRepository.countAllByTtlLessThan(20);
-        var lessThanOrEqual0 = persistedOrderRepository.countAllByTtlLessThan(1);
-        log.info("Orders in db {}, New orders {}, Not full TTL offers {}, Dead offers {}", count, count - ordersLastTime, lessThan20, lessThanOrEqual0);
+        var count = orderProvider.ordersCount();
+        var notFullTtlOrders = orderProvider.notFullTtlOrders();
+        var deadOffers = orderProvider.deadOrders();
+        log.info("Orders in db {}, New orders {}, Not full TTL offers {}, Dead offers {}", count, count - ordersLastTime, notFullTtlOrders, deadOffers);
         ordersLastTime = count;
     }
 }
