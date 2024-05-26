@@ -1,8 +1,11 @@
 package com.albionrmtempire.datatransferobject;
 
 
+import lombok.Builder;
+
 import java.util.Date;
 
+@Builder
 public record OrderResponse(
         String name,
         String displayName,
