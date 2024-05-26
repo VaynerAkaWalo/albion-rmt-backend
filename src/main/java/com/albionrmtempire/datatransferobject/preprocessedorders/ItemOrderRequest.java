@@ -10,6 +10,6 @@ public class ItemOrderRequest extends PreProcessedOrder {
 
     public ItemOrderRequest(OrderRequest request) {
         super(request);
-        this.quality = request.quality();
+        this.quality = (short) request.quality();
     }
 }
