@@ -11,26 +11,17 @@ import org.springframework.data.annotation.Id;
 import java.time.Instant;
 import java.util.Date;
 
-@Builder
 @Getter
 @Setter
-public class ItemOrder implements PersistedOrder {
+public class ItemOrder extends PersistedOrder {
 
-    @Id
-    private long id;
-    private long ttl;
-
-    private long orderId;
-    private long unitPrice;
-    private long amount;
-    private short tier;
-    private short enchant;
     private short quality;
-    private String buyer;
-    private String systemName;
 
-    private String sessionId;
-    private Instant lastUpdate;
+    @Builder
+    public ItemOrder(long id, long ttl, long orderId, long unitPrice, long amount, short tier, short enchant, String buyer, String systemName, String sessionId, Instant lastUpdate, short quality) {
+        super(id, ttl, orderId, unitPrice, amount, tier, enchant, buyer, systemName, sessionId, lastUpdate);
+        this.quality = quality;
+    }
 
     public static ItemOrder fromDto(ItemOrderRequest orderRequest) {
         return ItemOrder.builder()
@@ -50,15 +41,15 @@ public class ItemOrder implements PersistedOrder {
 
     public OrderResponse toDto(String displayName) {
         return OrderResponse.builder()
-                .orderId(orderId)
-                .name(systemName)
-                .displayName(StringUtils.isNotBlank(displayName) ? displayName : systemName)
-                .amount(amount)
-                .tier(tier)
-                .enchant(enchant)
+                .orderId(this.getOrderId())
+                .name(this.getSystemName())
+                .displayName(StringUtils.isNotBlank(displayName) ? displayName : this.getSystemName())
+                .amount(this.getAmount())
+                .tier(this.getTier())
+                .enchant(this.getEnchant())
                 .quality(quality)
-                .unitPrice(unitPrice)
-                .lastUpdate(Date.from(lastUpdate))
+                .unitPrice(this.getUnitPrice())
+                .lastUpdate(Date.from(this.getLastUpdate()))
                 .build();
     }
 }

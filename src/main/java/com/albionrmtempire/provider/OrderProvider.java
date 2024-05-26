@@ -11,7 +11,10 @@ import com.albionrmtempire.repository.ResourceOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -22,8 +25,8 @@ public class OrderProvider {
 
     public Optional<? extends PersistedOrder> getOrderIfExists(PreProcessedOrder orderRequest) {
         return switch (orderRequest) {
-            case ItemOrderRequest itemOrder -> itemOrderRepository.findById(orderRequest.getOrderId());
-            case ResourceOrderRequest resourceOrder -> resourceOrderRepository.findById(resourceOrder.getOrderId());
+            case ItemOrderRequest itemOrder -> itemOrderRepository.findByOrderId(itemOrder.getOrderId());
+            case ResourceOrderRequest resourceOrder -> resourceOrderRepository.findByOrderId(resourceOrder.getOrderId());
             default -> Optional.empty();
         };
     }
@@ -32,8 +35,33 @@ public class OrderProvider {
         switch (orderRequest) {
             case ItemOrderRequest itemOrder -> itemOrderRepository.save(ItemOrder.fromDto(itemOrder));
             case ResourceOrderRequest resourceRequest -> resourceOrderRepository.save(ResourceOrder.fromDto(resourceRequest));
-            default -> {return;}
-        };
+            default -> {}
+        }
+    }
+
+    public List<PersistedOrder> getAllOrders() {
+        return Stream.concat(
+                itemOrderRepository.findAll().stream(),
+                resourceOrderRepository.findAll().stream()
+                )
+                .collect(Collectors.toList());
+
+    }
+
+    public void updateOrder(PersistedOrder order) {
+        switch (order) {
+            case ItemOrder itemOrder -> itemOrderRepository.save(itemOrder);
+            case ResourceOrder resourceOrder -> resourceOrderRepository.save(resourceOrder);
+            default -> {}
+        }
+    }
+
+    public void removeOrder(PersistedOrder order) {
+        switch (order) {
+            case ItemOrder itemOrder -> itemOrderRepository.delete(itemOrder);
+            case ResourceOrder resourceOrder -> resourceOrderRepository.delete(resourceOrder);
+            default -> {}
+        }
     }
 
     public long ordersCount() {
