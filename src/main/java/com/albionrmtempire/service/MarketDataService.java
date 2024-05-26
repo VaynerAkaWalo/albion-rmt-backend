@@ -1,5 +1,6 @@
 package com.albionrmtempire.service;
 
+import com.albionrmtempire.dataobject.orders.PersistedOrder;
 import com.albionrmtempire.datatransferobject.OrderRequest;
 import com.albionrmtempire.datatransferobject.preprocessedorders.PreProcessedOrder;
 import com.albionrmtempire.exception.MalformedOrderRequestException;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 
@@ -58,6 +60,20 @@ public class MarketDataService {
             order.setTtl(0);
             itemOrderRepository.save(order);
         });
+    }
+
+    public void adjustOffersTtl() {
+        final var orders = orderProvider.getAllOrders();
+
+        for (PersistedOrder order : orders) {
+            order.setTtl(order.getTtl() - 1);
+
+            if (order.getTtl() > 0) {
+                orderProvider.updateOrder(order);
+            } else {
+                orderProvider.removeOrder(order);
+            }
+        }
     }
 
     private void logPublishedOrders(Map<String, List<String>> orders) {
