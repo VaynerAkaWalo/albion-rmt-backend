@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v2/price/resource")
 @RequiredArgsConstructor
-public class ResourcePriceController {
+public class ResourcePriceControllerV2 {
 
     private final ResourcePriceService resourcePriceService;
 
