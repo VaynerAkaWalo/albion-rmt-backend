@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v2/price/resource")
+@RequestMapping("api/v2/price/resource")
 @RequiredArgsConstructor
 public class ResourcePriceControllerV2 {
 
