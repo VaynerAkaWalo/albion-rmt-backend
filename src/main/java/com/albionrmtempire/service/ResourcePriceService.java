@@ -4,6 +4,8 @@ import com.albionrmtempire.dataobject.orders.ResourceOrder;
 import com.albionrmtempire.datatransferobject.price.resource.AllResourcePrice;
 import com.albionrmtempire.datatransferobject.price.resource.ResourcePrice;
 import com.albionrmtempire.datatransferobject.price.resource.TierResourcePrice;
+import com.albionrmtempire.datatransferobject.price.resource.v2.AllResourcePriceV2;
+import com.albionrmtempire.datatransferobject.price.resource.v2.ResourcePriceV2;
 import com.albionrmtempire.repository.ResourceOrderRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -21,6 +24,44 @@ import java.util.stream.Collectors;
 public class ResourcePriceService {
 
     private final ResourceOrderRepository orderRepository;
+
+    public AllResourcePriceV2 getPricesV2(@NonNull String systemName, String sessionId) {
+        final var orders = getOrders(systemName, sessionId);
+
+        var groupedByTiers = orders.stream()
+                .collect(Collectors.groupingBy(ResourceOrder::getTier));
+
+        return new AllResourcePriceV2(
+                systemName,
+                groupedByTiers.entrySet()
+                        .stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, entry -> processOrdersAtTier(entry.getValue())))
+        );
+    }
+
+    private Map<Short, ResourcePriceV2> processOrdersAtTier(List<ResourceOrder> orders) {
+        final var groupByEnchant = orders.stream()
+                .collect(Collectors.groupingBy(ResourceOrder::getEnchant));
+
+        return groupByEnchant.entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> processOrdersAtEnchant(entry.getValue())));
+    }
+
+    private ResourcePriceV2 processOrdersAtEnchant(List<ResourceOrder> orders) {
+        final PriceAccumulator accumulatedPrices = orders.stream()
+                .sorted(Comparator.comparing(ResourceOrder::getUnitPrice))
+                .collect(PriceAccumulator::new, PriceAccumulator::accept, PriceAccumulator::combine);
+
+        return new ResourcePriceV2(
+                accumulatedPrices.lowestPrice,
+                accumulatedPrices.firstTenPrice,
+                accumulatedPrices.firstHundredPrice,
+                accumulatedPrices.firstThousandPrice,
+                accumulatedPrices.firstTenThousandsPrice,
+                accumulatedPrices.totalAmount
+        );
+    }
 
     public AllResourcePrice getPrices(@NonNull String systemName, String sessionId) {
         final var orders = getOrders(systemName, sessionId);
@@ -101,24 +142,30 @@ public class ResourcePriceService {
         }
 
         public void accept(ResourceOrder currentOrder) {
-            totalAmount += currentOrder.getAmount();
-            totalPrice += currentOrder.getAmount() * currentOrder.getUnitPrice();
+            final long newTotalAmount = totalAmount + currentOrder.getAmount();
 
             if (lowestPrice == 0) {
                 lowestPrice = currentOrder.getUnitPrice();
             }
-            if (totalAmount >= 10 && firstTenPrice == 0) {
-                firstTenPrice = totalPrice / totalAmount;
+
+            if (firstTenPrice == 0 && newTotalAmount >= totalAmount) {
+                firstTenPrice = (totalPrice + (10 - totalAmount) * currentOrder.getUnitPrice()) / 10;
             }
-            if (totalAmount >= 100 && firstHundredPrice == 0) {
-                firstHundredPrice = totalPrice / totalAmount;
+
+            if (firstHundredPrice == 0 && newTotalAmount >= totalAmount) {
+                firstHundredPrice = (totalPrice + (100 - totalAmount) * currentOrder.getUnitPrice()) / 100;
             }
-            if (totalAmount >= 1_000 && firstThousandPrice == 0) {
-                firstThousandPrice = totalPrice / totalAmount;
+
+            if (firstThousandPrice == 0 && newTotalAmount >= totalAmount) {
+                firstThousandPrice = (totalPrice + (1_000 - totalAmount) * currentOrder.getUnitPrice()) / 1_000;
             }
-            if (totalAmount >= 10_000 && firstTenThousandsPrice == 0) {
-                firstTenThousandsPrice = totalPrice / totalAmount;
+
+            if (firstTenThousandsPrice == 0 && newTotalAmount >= totalAmount) {
+                firstTenThousandsPrice = (totalPrice + (10_000 - totalAmount) * currentOrder.getUnitPrice()) / 10_000;
             }
+
+            totalAmount = newTotalAmount;
+            totalPrice += currentOrder.getAmount() * currentOrder.getUnitPrice();
         }
 
         public void combine(PriceAccumulator priceAccumulator) {
