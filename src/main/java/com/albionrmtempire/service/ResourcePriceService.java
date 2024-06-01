@@ -148,19 +148,19 @@ public class ResourcePriceService {
                 lowestPrice = currentOrder.getUnitPrice();
             }
 
-            if (firstTenPrice == 0 && newTotalAmount >= totalAmount) {
+            if (firstTenPrice == 0 && newTotalAmount >= 10) {
                 firstTenPrice = (totalPrice + (10 - totalAmount) * currentOrder.getUnitPrice()) / 10;
             }
 
-            if (firstHundredPrice == 0 && newTotalAmount >= totalAmount) {
+            if (firstHundredPrice == 0 && newTotalAmount >= 100) {
                 firstHundredPrice = (totalPrice + (100 - totalAmount) * currentOrder.getUnitPrice()) / 100;
             }
 
-            if (firstThousandPrice == 0 && newTotalAmount >= totalAmount) {
+            if (firstThousandPrice == 0 && newTotalAmount >= 1_000) {
                 firstThousandPrice = (totalPrice + (1_000 - totalAmount) * currentOrder.getUnitPrice()) / 1_000;
             }
 
-            if (firstTenThousandsPrice == 0 && newTotalAmount >= totalAmount) {
+            if (firstTenThousandsPrice == 0 && newTotalAmount >= 10_000) {
                 firstTenThousandsPrice = (totalPrice + (10_000 - totalAmount) * currentOrder.getUnitPrice()) / 10_000;
             }
 
