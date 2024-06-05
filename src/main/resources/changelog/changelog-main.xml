@@ -159,4 +159,44 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="15" author="vayner">
+        <createTable tableName="crystal_match">
+            <column name="match_id" type="varchar2">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="varchar2"/>
+            <column name="winner" type="int"/>
+            <column name="team_one_points" type="int"/>
+            <column name="team_two_points" type="int"/>
+            <column name="level" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="16" author="vayner">
+        <createTable tableName="crystal_player">
+            <column name="player_id" type="varchar2">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="varchar2"/>
+            <column name="name" type="varchar2"/>
+            <column name="kills" type="int"/>
+            <column name="deaths" type="int"/>
+            <column name="healing_done" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="17" author="vayner">
+        <createTable tableName="crystal_player_match">
+            <column name="id" type="serial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="player_id" type="varchar2">
+                <constraints foreignKeyName="player_id" references="crystal_player(player_id)"/>
+            </column>
+            <column name="match_id" type="varchar2">
+                <constraints foreignKeyName="match_id" references="crystal_match(match_id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>
