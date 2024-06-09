@@ -1,7 +1,9 @@
 package com.albionrmtempire.config;
 
+import com.albionrmtempire.provider.AlbionApiProvider;
 import com.albionrmtempire.service.MarketDataService;
 import com.albionrmtempire.service.MetricsService;
+import com.albionrmtempire.service.crystalleague.CrystalMatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +20,8 @@ public class SchedulerConfig {
 
     private final MetricsService metricsService;
     private final MarketDataService marketDataService;
+    private final AlbionApiProvider albionApiProvider;
+    private final CrystalMatchService crystalMatchService;
 
     @Scheduled(fixedDelay = 5000)
     @CacheEvict("orders")
@@ -31,5 +35,12 @@ public class SchedulerConfig {
     @Scheduled(cron = "@hourly")
     void reduceTtl() {
         marketDataService.adjustOffersTtl();
+    }
+
+    @Scheduled(cron = "*/5 * * * *")
+    void getLatestCrystalMatches() {
+        final var matches = albionApiProvider.getLatestCrystalMatches();
+
+        matches.forEach(crystalMatchService::persistMatchResults);
     }
 }
