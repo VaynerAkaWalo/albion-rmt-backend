@@ -37,7 +37,7 @@ public class SchedulerConfig {
         marketDataService.adjustOffersTtl();
     }
 
-    @Scheduled(cron = "*/5 * * * *")
+    @Scheduled(fixedDelay = 300_000)
     void getLatestCrystalMatches() {
         final var matches = albionApiProvider.getLatestCrystalMatches();
 
