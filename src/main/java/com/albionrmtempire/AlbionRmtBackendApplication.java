@@ -9,5 +9,4 @@ public class AlbionRmtBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(AlbionRmtBackendApplication.class, args);
     }
-
 }
