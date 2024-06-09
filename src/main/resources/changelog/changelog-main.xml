@@ -169,6 +169,8 @@
             <column name="winner" type="int"/>
             <column name="team_one_points" type="int"/>
             <column name="team_two_points" type="int"/>
+            <column name="team_one_leader" type="varchar2"/>
+            <column name="team_two_leader" type="varchar2"/>
             <column name="level" type="int"/>
         </createTable>
     </changeSet>
@@ -204,5 +206,21 @@
             <column name="healing_done" type="int"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="18" author="vayner">
+        <createTable tableName="team_core_players">
+            <column name="id" type="varchar2">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar2"/>
+            <column name="team" type="varchar2"/>
+            <column name="priority" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="19" author="vayner">
+        <loadData tableName="team_core_players" file="classpath:data/corePlayers.csv"/>
+    </changeSet>
+
 
 </databaseChangeLog>

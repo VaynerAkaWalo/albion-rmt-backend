@@ -8,5 +8,7 @@ public record CrystalMatchResponse(
         int winner,
         int teamOnePoints,
         int teamTwoPoints,
+        String teamOneLeader,
+        String teamTwoLeader,
         List<ParticipantResponse> players,
         Instant startTime) { }
