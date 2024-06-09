@@ -4,12 +4,17 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.Instant;
+import java.util.List;
+
 @Table("crystal_match")
-public record CrystalLeagueMatch(
+public record Match(
         @Id String matchId,
-        @Version String version,
+        @Version Integer version,
         int winner,
-        int timeOnePoints,
-        int timeTwoPoints,
-        int level
+        int teamOnePoints,
+        int teamTwoPoints,
+        int level,
+        Instant startTime,
+        List<Participant> players
 ) {}

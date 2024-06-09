@@ -164,7 +164,8 @@
             <column name="match_id" type="varchar2">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="version" type="varchar2"/>
+            <column name="start_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="version" type="int"/>
             <column name="winner" type="int"/>
             <column name="team_one_points" type="int"/>
             <column name="team_two_points" type="int"/>
@@ -174,10 +175,10 @@
 
     <changeSet id="16" author="vayner">
         <createTable tableName="crystal_player">
-            <column name="player_id" type="varchar2">
+            <column name="id" type="varchar2">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="version" type="varchar2"/>
+            <column name="version" type="int"/>
             <column name="name" type="varchar2"/>
             <column name="kills" type="int"/>
             <column name="deaths" type="int"/>
@@ -190,12 +191,17 @@
             <column name="id" type="serial">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="player_id" type="varchar2">
-                <constraints foreignKeyName="player_id" references="crystal_player(player_id)"/>
+            <column name="player" type="varchar2">
+                <constraints foreignKeyName="id" references="crystal_player(id)"/>
             </column>
-            <column name="match_id" type="varchar2">
+            <column name="crystal_match" type="varchar2">
                 <constraints foreignKeyName="match_id" references="crystal_match(match_id)"/>
             </column>
+            <column name="crystal_match_key" type="varchar2"/>
+            <column name="team" type="int"/>
+            <column name="kills" type="int"/>
+            <column name="deaths" type="int"/>
+            <column name="healing_done" type="int"/>
         </createTable>
     </changeSet>
 

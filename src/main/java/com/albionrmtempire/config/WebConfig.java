@@ -37,12 +37,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .build()
                 .createClient(AlbionApiClient.class);
     }
-
-    @Bean
-    ApplicationRunner applicationRunner(AlbionApiProvider albionApiProvider) {
-        return args -> {
-            albionApiProvider.getLatestCrystalMatches().forEach(System.out::println);
-        };
-    }
-
 }
