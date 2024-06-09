@@ -11,5 +11,5 @@ public interface CrystalPlayerRepository extends CrudRepository<Player, String> 
 
     Set<Player> findAllByIdIn(Collection<String> ids);
 
-    Optional<Player> findByName(String name);
+    Optional<Player> findByNameIgnoreCase(String name);
 }

@@ -41,6 +41,8 @@ public class CrystalMatchService {
                 matchResults.team2Tickets(),
                 matchResults.crystalLeagueLevel(),
                 Instant.parse(matchResults.startTime()),
+                AggregateReference.to(playerService.getLeaderForTeam(matchResults.team1Results().keySet(), matchResults.team1LeaderId())),
+                AggregateReference.to(playerService.getLeaderForTeam(matchResults.team2Results().keySet(), matchResults.team2LeaderId())),
                 participants);
 
         crystalLeagueMatchRepository.save(match);

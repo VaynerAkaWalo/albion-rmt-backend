@@ -39,7 +39,7 @@ public class CrystalMatchController {
 
     @GetMapping(params = "playerName")
     public List<CrystalMatchResponse> getAllByPlayer(@RequestParam(value = "playerName") String playerName) {
-        final var player = playerRepository.findByName(playerName);
+        final var player = playerRepository.findByNameIgnoreCase(playerName);
         if (player.isEmpty()) {
             throw new NotFoundException("Could not find player with provided name");
         }
@@ -77,6 +77,8 @@ public class CrystalMatchController {
                 match.winner(),
                 match.teamOnePoints(),
                 match.teamTwoPoints(),
+                playerInfo.get(match.teamOneLeader().getId()).name(),
+                playerInfo.get(match.teamTwoLeader().getId()).name(),
                 match.players().stream().map(participant -> toDto(participant, playerInfo)).toList(),
                 match.startTime()
         );

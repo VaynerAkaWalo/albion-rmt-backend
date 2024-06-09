@@ -11,6 +11,9 @@ public interface CrystalLeagueMatchRepository extends CrudRepository<Match, Stri
     @Query("select * from crystal_match cm join crystal_player_match p on cm.match_id = p.crystal_match where p.player = :playerId")
     Set<Match> findAllByPlayerId(String playerId);
 
+    @Query("select * from crystal_match cm join crystal_player_match p on cm.match_id = p.crystal_match where p.player = :playerId limit :limit")
+    Set<Match> findAllByPlayerIdWithLimit(String playerId, int limit);
+
     Set<Match> findAll();
 
     Set<Match> findAllByLevel(int level);
