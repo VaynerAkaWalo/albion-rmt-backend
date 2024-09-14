@@ -1,9 +1,9 @@
 package com.albionrmtempire.config;
 
-import com.albionrmtempire.provider.AlbionApiProvider;
 import com.albionrmtempire.proxy.AlbionApiClient;
+import com.vaynerakawalo.springobservability.ObservabilityAutoConfiguration;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
@@ -15,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
+@ImportAutoConfiguration(classes = ObservabilityAutoConfiguration.class)
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
