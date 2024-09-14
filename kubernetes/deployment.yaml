@@ -19,6 +19,10 @@ spec:
           image: ghcr.io/vaynerakawalo/albion-rmt-backend
           ports:
             - containerPort: 8050
+          livenessProbe:
+            httpGet:
+              path: albion-rmt-backend/health
+              port: 8050
           env:
             - name: DB_URL
               value: "albion-db.external.svc.cluster.local/albion-db"
