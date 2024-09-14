@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: albion-rmt-backend-deployment-test
+  name: albion-rmt-backend-deployment
   labels:
-    app: albion-rmt-backend-test
+    app: albion-rmt-backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: albion-rmt-backend-test
+      app: albion-rmt-backend
   template:
     metadata:
       labels:
-        app: albion-rmt-backend-test
+        app: albion-rmt-backend
     spec:
       containers:
         - name: albion-rmt-backend
