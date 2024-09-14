@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: albion-rmt-backend-deployment-test
+  labels:
+    app: albion-rmt-backend-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: albion-rmt-backend-test
+  template:
+    metadata:
+      labels:
+        app: albion-rmt-backend-test
+    spec:
+      containers:
+        - name: albion-rmt-backend
+          image: ghcr.io/vaynerakawalo/albion-rmt-backend
+          ports:
+            - containerPort: 8050
+          env:
+            - name: DB_URL
+              value: "albion-db.external.svc.cluster.local/albion-db"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: albion-db
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: albion-db
+                  key: password
