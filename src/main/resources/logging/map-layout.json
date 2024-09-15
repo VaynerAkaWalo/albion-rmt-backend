@@ -1,0 +1,25 @@
+{
+    "timestamp": {
+        "$resolver": "timestamp",
+        "pattern": {
+            "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            "timeZone": "UTC"
+        }
+    },
+    "logger": {
+        "$resolver": "pattern",
+        "pattern": "%c{1}:%L"
+    },
+    "thread_name": {
+        "$resolver": "thread",
+        "field": "name"
+    },
+    "level": {
+        "$resolver": "level",
+        "field": "name"
+    },
+    "map": {
+        "$resolver": "map",
+        "flatten": true
+    }
+}
