@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 
@@ -86,7 +85,7 @@ public class MarketDataService {
             return Pair.of(SUCCESS, orderProducer.publishOrderEvent(order));
         } catch (MalformedOrderRequestException | UnsupportedOrderException | NotFoundException ex) {
             log.warn("Could not publish order: {}", ex.getMessage());
-            return Pair.of(FAIL, ItemUtil.getItemSystemName(order.itemGroupType()));
+            return Pair.of(FAIL, ItemUtil.getItemSystemName(order.itemGroupTypeId()));
         }
     }
 }

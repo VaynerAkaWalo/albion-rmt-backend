@@ -21,18 +21,18 @@ public abstract class PreProcessedOrder {
     private final Instant acknowledgedDate;
 
     protected PreProcessedOrder(OrderRequest request) {
-        this.orderId = request.Id();
-        this.unitPrice = request.unitPrice() / 10000;
+        this.orderId = request.id();
+        this.unitPrice = request.unitPriceSilver() / 10000;
         this.amount = request.amount();
         this.tier = (short) request.tier();
-        this.enchant = (short) request.enchantment();
-        this.buyer = request.buyer();
+        this.enchant = (short) request.enchantmentLevel();
+        this.buyer = request.buyerName();
         this.systemName = resolveSystemName(request);
         this.sessionId = Objects.nonNull(request.sessionId()) ? request.sessionId() : ItemUtil.randomSessionId();
         this.acknowledgedDate = Instant.now();
     }
 
     protected String resolveSystemName(OrderRequest orderRequest) {
-        return ItemUtil.getItemSystemName(orderRequest.itemGroupType());
+        return ItemUtil.getItemSystemName(orderRequest.itemGroupTypeId());
     }
 }

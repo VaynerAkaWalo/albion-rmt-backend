@@ -14,6 +14,6 @@ public class ResourceOrderRequest extends PreProcessedOrder {
 
     @Override
     protected String resolveSystemName(OrderRequest orderRequest) {
-        return ItemUtil.getResourceSystemName(orderRequest.itemGroupType());
+        return ItemUtil.getResourceSystemName(orderRequest.itemGroupTypeId());
     }
 }

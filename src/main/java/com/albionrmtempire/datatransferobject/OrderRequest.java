@@ -1,20 +1,22 @@
 package com.albionrmtempire.datatransferobject;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonFormat(with = {JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES})
 public record OrderRequest(
-        @JsonProperty("Id") long Id,
-        @JsonProperty("UnitPriceSilver") long unitPrice,
-        @JsonProperty("TotalPriceSilver") long totalPrice,
-        @JsonProperty("Amount") long amount,
-        @JsonProperty("Tier") long tier,
-        @JsonProperty("EnchantmentLevel") long enchantment,
-        @JsonProperty("AuctionType") String auctionType,
-        @JsonProperty("QualityLevel") long quality,
-        @JsonProperty("IsFinished") boolean isFinished,
-        @JsonProperty("BuyerName") String buyer,
-        @JsonProperty("ItemTypeId") String itemType,
-        @JsonProperty("ItemGroupTypeId") String itemGroupType,
-        @JsonProperty("Expires") String expireDate,
-        @JsonProperty("sessionId") String sessionId
+        long id,
+        long unitPriceSilver,
+        long amount,
+        long tier,
+        long enchantmentLevel,
+        String auctionType,
+        long qualityLevel,
+        boolean isFinished,
+        String buyerName,
+        String itemTypeId,
+        String itemGroupTypeId,
+        String expires,
+        String sessionId
 ) {}
