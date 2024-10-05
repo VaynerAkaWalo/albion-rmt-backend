@@ -42,7 +42,7 @@ public class OrderProducer {
     private PreProcessedOrder preProcessOrder(OrderRequest orderRequest) {
         validateOrderRequest(orderRequest);
 
-        if (StringUtils.equals(orderRequest.buyer(), BLACK_MARKET)) {
+        if (StringUtils.equals(orderRequest.buyerName(), BLACK_MARKET)) {
             validateItemOrderRequest(orderRequest);
             return new ItemOrderRequest(orderRequest);
         }
@@ -63,7 +63,7 @@ public class OrderProducer {
             throw new MalformedOrderRequestException("Tier must me between 1 and 8 inclusive");
         }
 
-        if (request.enchantment() < 0 || request.enchantment() > 4) {
+        if (request.enchantmentLevel() < 0 || request.enchantmentLevel() > 4) {
             throw new MalformedOrderRequestException("Enchant must be between 0 and 4 inclusive");
         }
 
@@ -71,11 +71,11 @@ public class OrderProducer {
             throw new MalformedOrderRequestException("Amount must be greater than zero");
         }
 
-        if (request.unitPrice() < 1) {
+        if (request.unitPriceSilver() < 1) {
             throw new MalformedOrderRequestException("Unit price must be greater than zero");
         }
 
-        if (request.itemGroupType().split("_").length < 2) {
+        if (request.itemGroupTypeId().split("_").length < 2) {
             throw new MalformedOrderRequestException("Malformed item identifier");
         }
 
@@ -85,11 +85,11 @@ public class OrderProducer {
     }
 
     private void validateItemOrderRequest(OrderRequest request) {
-        cacheableResourceProvider.getItemBySystemName(ItemUtil.getItemSystemName(request.itemGroupType()));
+        cacheableResourceProvider.getItemBySystemName(ItemUtil.getItemSystemName(request.itemGroupTypeId()));
     }
 
     private boolean isResource(OrderRequest request) {
-        final var itemGroupTypes = request.itemGroupType().split("_");
+        final var itemGroupTypes = request.itemGroupTypeId().split("_");
 
         final var isArmour = ARMOURS.stream()
                 .anyMatch(itemGroupTypes[0]::contains);
