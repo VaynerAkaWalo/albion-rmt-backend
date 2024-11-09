@@ -36,6 +36,13 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: https://ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build Jar
         run: ./gradlew bootJar
 
@@ -43,13 +50,6 @@ jobs:
         run: |
           mv build/libs/*.jar application.jar
           java -Djarmode=tools -jar application.jar extract --layers --destination extracted
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
-        with:
-          registry: https://ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker meta
         id: meta
