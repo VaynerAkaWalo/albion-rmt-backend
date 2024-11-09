@@ -6,7 +6,7 @@ import com.albionrmtempire.dataobject.Subcategory;
 import com.albionrmtempire.datatransferobject.CategoryResponse;
 import com.albionrmtempire.datatransferobject.ShortItemResponse;
 import com.albionrmtempire.datatransferobject.SubcategoryResponse;
-import com.albionrmtempire.repository.CategoryRepository;
+import com.albionrmtempire.provider.CacheableResourceProvider;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ class ItemInfoServiceTest {
     private ItemInfoService itemInfoService;
 
     @Mock
-    private CategoryRepository categoryRepository;
+    private CacheableResourceProvider cacheableResourceProvider;
 
     @Nested
     class getAllCategories {
@@ -37,7 +37,7 @@ class ItemInfoServiceTest {
 
         @Test
         void happyPath_returnCategoryInfo() {
-            when(categoryRepository.findAll()).thenReturn(List.of(testCategory));
+            when(cacheableResourceProvider.getAllCategories()).thenReturn(List.of(testCategory));
 
             final List<CategoryResponse> response = itemInfoService.getAllCategories();
 
