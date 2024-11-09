@@ -4,6 +4,10 @@ run-name: Running tests on '${{ github.head_ref || github.ref_name }}' by @${{ g
 
 on: pull_request
 
+env:
+  GITHUB_ACTOR: ${{ github.actor }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   run-tests:
     name: run-tests
