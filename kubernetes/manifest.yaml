@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: albion-rmt-backend
+  labels:
+    app: albion-rmt-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: albion-rmt-backend
+  template:
+    metadata:
+      name: albion-rmt-backend
+      labels:
+        app: albion-rmt-backend
+    spec:
+      containers:
+        - name: albion-rmt-backend
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /health
+          image: ghcr.io/vaynerakawalo/albion-rmt-backend:latest
+          ports:
+            - containerPort: 80
+              protocol: TCP
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: albion-rmt-backend
+spec:
+  selector:
+    app: albion-rmt-backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
