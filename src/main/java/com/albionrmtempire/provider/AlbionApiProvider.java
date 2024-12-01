@@ -12,6 +12,7 @@ import java.util.List;
 
 @Log4j2
 @Component
+@Egress(service = "albionApi")
 @RequiredArgsConstructor
 public class AlbionApiProvider {
 
