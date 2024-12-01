@@ -2,6 +2,7 @@ package com.albionrmtempire.provider;
 
 import com.albionrmtempire.datatransferobject.OrderResponse;
 import com.albionrmtempire.repository.ItemOrderRepository;
+import com.vaynerakawalo.springobservability.logging.annotation.Egress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ public class CachedMarketDataProvider {
     private final CacheableResourceProvider cacheableResourceProvider;
 
     @Cacheable("orders")
+    @Egress
     public Collection<OrderResponse> getAllNotExpiredItemOrders() {
         final UnaryOperator<String> fetchDisplayName
                 = systemName -> cacheableResourceProvider.getItemBySystemName(systemName).displayName();
