@@ -2,6 +2,7 @@ package com.albionrmtempire.provider;
 
 import com.albionrmtempire.datatransferobject.crystalleague.CrystalLeagueMatchStats;
 import com.albionrmtempire.proxy.AlbionApiClient;
+import com.vaynerakawalo.springobservability.logging.annotation.Egress;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ public class AlbionApiProvider {
 
     private final AlbionApiClient albionApiClient;
 
+    @Egress(method = "getLatestCrystalMatches")
     public List<CrystalLeagueMatchStats> getLatestCrystalMatches() {
         return albionApiClient.crystalLeagueMatches(
                 STANDARD_LIMIT,
@@ -27,6 +29,7 @@ public class AlbionApiProvider {
                 TWENTY_CRYSTAL_LEAGUE_MATCH_TYPE);
     }
 
+    @Egress(method = "getAllCrystalMatches")
     public List<CrystalLeagueMatchStats> getAllMatches() {
         final List<CrystalLeagueMatchStats> allMatches = new LinkedList<>();
 

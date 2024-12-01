@@ -8,6 +8,7 @@ import com.albionrmtempire.datatransferobject.preprocessedorders.PreProcessedOrd
 import com.albionrmtempire.datatransferobject.preprocessedorders.ResourceOrderRequest;
 import com.albionrmtempire.repository.ItemOrderRepository;
 import com.albionrmtempire.repository.ResourceOrderRepository;
+import com.vaynerakawalo.springobservability.logging.annotation.Egress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,7 @@ public class OrderProvider {
     private final ItemOrderRepository itemOrderRepository;
     private final ResourceOrderRepository resourceOrderRepository;
 
+    @Egress
     public Optional<? extends PersistedOrder> getOrderIfExists(PreProcessedOrder orderRequest) {
         return switch (orderRequest) {
             case ItemOrderRequest itemOrder -> itemOrderRepository.findByOrderId(itemOrder.getOrderId());
@@ -31,6 +33,7 @@ public class OrderProvider {
         };
     }
 
+    @Egress
     public void persistOrder(PreProcessedOrder orderRequest) {
         switch (orderRequest) {
             case ItemOrderRequest itemOrder -> itemOrderRepository.save(ItemOrder.fromDto(itemOrder));
@@ -39,6 +42,7 @@ public class OrderProvider {
         }
     }
 
+    @Egress
     public List<PersistedOrder> getAllOrders() {
         return Stream.concat(
                 itemOrderRepository.findAll().stream(),
@@ -48,6 +52,7 @@ public class OrderProvider {
 
     }
 
+    @Egress
     public void updateOrder(PersistedOrder order) {
         switch (order) {
             case ItemOrder itemOrder -> itemOrderRepository.save(itemOrder);
@@ -56,6 +61,7 @@ public class OrderProvider {
         }
     }
 
+    @Egress
     public void removeOrder(PersistedOrder order) {
         switch (order) {
             case ItemOrder itemOrder -> itemOrderRepository.delete(itemOrder);
@@ -64,15 +70,18 @@ public class OrderProvider {
         }
     }
 
+    @Egress
     public long ordersCount() {
         return itemOrderRepository.count() + resourceOrderRepository.count();
     }
 
+    @Egress
     public long notFullTtlOrders() {
         final var limit = PersistedOrder.DEFAULT_TTL;
         return itemOrderRepository.countAllByTtlLessThan(limit) + resourceOrderRepository.countAllByTtlLessThan(limit);
     }
 
+    @Egress
     public long deadOrders() {
         final var limit = 0;
         return itemOrderRepository.countAllByTtlLessThan(limit) + resourceOrderRepository.countAllByTtlLessThan(limit);

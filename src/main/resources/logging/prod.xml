@@ -2,11 +2,11 @@
 <Configuration status="WARN">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <JsonTemplateLayout eventTemplateUri="classpath:logging/prod.json" objectMessageAsJsonObject="true"/>
+            <JsonTemplateLayout eventTemplateUri="classpath:logging/basic-log.json" objectMessageAsJsonObject="true"/>
         </Console>
 
-        <Console name="MapLogs" target="SYSTEM_OUT">
-            <JsonTemplateLayout eventTemplateUri="classpath:logging/map-layout.json"/>
+        <Console name="OperationLogs" target="SYSTEM_OUT">
+            <JsonTemplateLayout eventTemplateUri="classpath:logging/operation-log.json"/>
         </Console>
     </Appenders>
 
@@ -16,7 +16,7 @@
         </Root>
 
         <Logger name="com.vaynerakawalo.springobservability.logging" level="info" additivity="false">
-            <AppenderRef ref="MapLogs"/>
+            <AppenderRef ref="OperationLogs"/>
         </Logger>
     </Loggers>
 </Configuration>

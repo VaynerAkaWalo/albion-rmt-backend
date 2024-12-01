@@ -1,11 +1,4 @@
 {
-    "timestamp": {
-        "$resolver": "timestamp",
-        "pattern": {
-            "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-            "timeZone": "UTC"
-        }
-    },
     "logger": {
         "$resolver": "pattern",
         "pattern": "%c{1}:%L"

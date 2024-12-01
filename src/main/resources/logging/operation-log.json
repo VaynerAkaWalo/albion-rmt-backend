@@ -1,0 +1,10 @@
+{
+    "thread_name": {
+        "$resolver": "thread",
+        "field": "name"
+    },
+    "map": {
+        "$resolver": "map",
+        "flatten": true
+    }
+}

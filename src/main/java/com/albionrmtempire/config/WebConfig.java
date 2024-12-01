@@ -2,6 +2,7 @@ package com.albionrmtempire.config;
 
 import com.albionrmtempire.proxy.AlbionApiClient;
 import com.vaynerakawalo.springobservability.ObservabilityAutoConfiguration;
+import com.vaynerakawalo.springobservability.logging.interceptor.EgressCallInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -25,9 +26,15 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    EgressCallInterceptor egressCallInterceptor() {
+        return new EgressCallInterceptor();
+    }
+
+    @Bean
     RestClient albionApiRestClient(@Value("${albion.api.url}") String url) {
         return RestClient.builder()
                 .baseUrl(url)
+                .requestInterceptor(egressCallInterceptor())
                 .build();
     }
 
