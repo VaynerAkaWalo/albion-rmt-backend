@@ -11,7 +11,7 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="*OperationLog" additivity="false">
+        <Logger name="OperationLogger" additivity="false">
             <AppenderRef ref="ObservabilityLogs"/>
         </Logger>
 
