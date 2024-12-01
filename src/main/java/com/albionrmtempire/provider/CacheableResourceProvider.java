@@ -9,9 +9,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.List;
 
 @Component
+@Egress(service = "albionDB")
 @RequiredArgsConstructor
 public class CacheableResourceProvider {
 

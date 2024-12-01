@@ -12,6 +12,7 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 @Component
+@Egress(service = "albionDB")
 @RequiredArgsConstructor
 public class CachedMarketDataProvider {
 

@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
+@Egress(service = "albionDB")
 @RequiredArgsConstructor
 public class OrderProvider {
 
